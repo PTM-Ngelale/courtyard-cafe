@@ -1,0 +1,957 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="./support.js"></script>
+  </head>
+  <body>
+    <x-dc>
+      <helmet>
+        <link
+          rel="stylesheet"
+          href="_ds/nocturne-571d4282-0ab3-461a-b292-edfaa7aff57b/styles.css"
+        />
+        <script src="_ds/nocturne-571d4282-0ab3-461a-b292-edfaa7aff57b/_ds_bundle.js"></script>
+        <style>
+          :root {
+            --color-bg: #f7f2ef;
+            --color-surface: #fffbf9;
+            --color-text: #1c2320;
+            --color-accent: #a8813f;
+            --color-divider: rgba(28, 35, 32, 0.16);
+            --color-neutral-100: #fffdfc;
+            --color-neutral-200: #f4ece7;
+            --color-neutral-300: #4b524d;
+            --color-neutral-400: #6d746e;
+            --color-neutral-500: #8a908a;
+            --color-neutral-600: #a8ada7;
+            --color-neutral-700: #c9c2ba;
+            --color-neutral-800: #e6ddd6;
+            --color-neutral-900: #f2eae5;
+            --color-accent-100: #fdf8f0;
+            --color-accent-200: #e8d3ab;
+            --color-accent-300: #8a6730;
+            --color-accent-400: #b8944f;
+            --color-accent-500: #a8813f;
+            --color-section: #1c2320;
+            --shadow-sm: 0 0 0 1px rgba(28, 35, 32, 0.1);
+            --shadow-md:
+              0 0 0 1px rgba(28, 35, 32, 0.1), 0 6px 18px rgba(28, 35, 32, 0.08);
+          }
+          body {
+            margin: 0;
+            background: #f7f2ef;
+            color: #1c2320;
+          }
+          a {
+            color: var(--color-accent-300);
+            text-decoration: none;
+          }
+          a:hover {
+            color: var(--color-accent);
+          }
+          .btn-primary {
+            border-color: var(--color-accent);
+            color: var(--color-accent-300);
+          }
+          .btn-primary:hover {
+            background: rgba(168, 129, 63, 0.1);
+          }
+          .btn-ghost {
+            color: var(--color-neutral-300);
+          }
+          .btn-ghost:hover {
+            background: rgba(28, 35, 32, 0.05);
+          }
+          .tag-accent {
+            background: rgba(168, 129, 63, 0.14);
+            color: var(--color-accent-300);
+            border-color: rgba(168, 129, 63, 0.35);
+          }
+          .tag-outline {
+            border-color: rgba(28, 35, 32, 0.22);
+            color: var(--color-neutral-300);
+          }
+          html {
+            scroll-behavior: smooth;
+          }
+        </style>
+      </helmet>
+
+      <div
+        style="
+          background: var(--color-bg);
+          color: var(--color-text);
+          font-family: var(--font-body);
+          overflow-x: hidden;
+        "
+      >
+        <header
+          style="
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 14px clamp(20px, 5vw, 72px);
+            background: color-mix(in srgb, #f7f2ef 90%, transparent);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--color-divider);
+          "
+        >
+          <a href="#top" style="display: flex; align-items: center; gap: 12px">
+            <img
+              src="img/logo-dark.png"
+              alt="The Courtyard Cafe"
+              style="width: 38px; height: 38px; object-fit: contain"
+            />
+            <span
+              style="
+                font-family: var(--font-heading);
+                font-size: 14px;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--color-text);
+              "
+              >The Courtyard</span
+            >
+          </a>
+          <nav
+            style="
+              display: flex;
+              align-items: center;
+              gap: 28px;
+              font-size: 13px;
+              letter-spacing: 0.06em;
+            "
+          >
+            <a
+              href="#about"
+              style="color: var(--color-neutral-300)"
+              style-hover="color:var(--color-accent-300)"
+              >About</a
+            >
+            <a
+              href="#menu"
+              style="color: var(--color-neutral-300)"
+              style-hover="color:var(--color-accent-300)"
+              >Menu</a
+            >
+            <a
+              href="#drinks"
+              style="color: var(--color-neutral-300)"
+              style-hover="color:var(--color-accent-300)"
+              >Drinks</a
+            >
+            <a
+              href="#gallery"
+              style="color: var(--color-neutral-300)"
+              style-hover="color:var(--color-accent-300)"
+              >Gallery</a
+            >
+            <a href="#visit" class="btn btn-primary" style="font-size: 13px"
+              >Visit us</a
+            >
+          </nav>
+        </header>
+
+        <section
+          id="top"
+          style="
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            align-items: center;
+            gap: clamp(24px, 5vw, 64px);
+            padding: clamp(48px, 7vw, 104px) clamp(20px, 5vw, 72px)
+              clamp(40px, 6vw, 88px);
+          "
+        >
+          <div
+            style="
+              position: absolute;
+              inset: -20% 40% 30% -10%;
+              background: radial-gradient(
+                closest-side,
+                rgba(168, 129, 63, 0.16),
+                transparent 70%
+              );
+              pointer-events: none;
+            "
+          ></div>
+          <div style="position: relative; max-width: 560px">
+            <img
+              src="img/logo-dark.png"
+              alt=""
+              style="
+                width: clamp(92px, 10vw, 124px);
+                opacity: 0.9;
+                margin-bottom: 26px;
+              "
+            />
+            <p
+              style="
+                font-size: 12px;
+                letter-spacing: 0.28em;
+                text-transform: uppercase;
+                color: var(--color-accent-300);
+                margin: 0 0 18px;
+              "
+            >
+              Café &amp; Kitchen · Port Harcourt
+            </p>
+            <h1
+              style="
+                font-size: clamp(40px, 5.6vw, 68px);
+                line-height: 1.05;
+                margin: 0 0 20px;
+                text-wrap: balance;
+              "
+            >
+              Where every moment blooms
+            </h1>
+            <p
+              style="
+                font-size: 17px;
+                line-height: 1.7;
+                color: var(--color-neutral-300);
+                max-width: 46ch;
+                margin: 0 0 30px;
+              "
+            >
+              Slow breakfasts, long lunches and something cold in a tall glass —
+              served under the ferns from morning until late.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 12px">
+              <a href="#menu" class="btn btn-primary">See the menu</a>
+              <a href="#visit" class="btn btn-ghost">Find us</a>
+            </div>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 28px;
+                margin-top: 44px;
+                padding-top: 26px;
+                border-top: 1px solid var(--color-divider);
+                font-size: 13px;
+                color: var(--color-neutral-400);
+              "
+            >
+              <span>Open daily · 8am – 11pm</span>
+              <span>12 Admiralty Way, Lekki</span>
+            </div>
+          </div>
+          <div
+            style="
+              position: relative;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 14px;
+              align-items: end;
+            "
+          >
+            <figure
+              style="
+                border-radius: var(--radius-lg);
+                overflow: hidden;
+                aspect-ratio: 3/4;
+              "
+            >
+              <img
+                src="img/breakfast.png"
+                alt="English breakfast"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+            <figure
+              style="
+                border-radius: var(--radius-lg);
+                overflow: hidden;
+                aspect-ratio: 3/4;
+                transform: translateY(-32px);
+              "
+            >
+              <img
+                src="img/milkshake.png"
+                alt="Strawberry milkshake"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: clamp(28px, 5vw, 72px);
+            align-items: center;
+            padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px);
+            border-top: 1px solid var(--color-divider);
+          "
+        >
+          <div style="max-width: 52ch">
+            <h6 style="color: var(--color-accent-300); margin: 0 0 18px">
+              The cafe
+            </h6>
+            <h2
+              style="
+                font-size: clamp(28px, 3.4vw, 40px);
+                margin: 0 0 20px;
+                text-wrap: balance;
+              "
+            >
+              A green corner of the city, set for a long table
+            </h2>
+            <p
+              style="
+                color: var(--color-neutral-300);
+                font-size: 16px;
+                line-height: 1.75;
+              "
+            >
+              The Courtyard began as a small kitchen with a handful of tables
+              and a lot of ferns. It still feels that way: plates that take
+              their time, coffee pulled properly, and a room that stays quiet
+              enough to hear the person across from you.
+            </p>
+            <p
+              style="
+                color: var(--color-neutral-300);
+                font-size: 16px;
+                line-height: 1.75;
+              "
+            >
+              Breakfast runs all morning. Lunch leans West African and
+              comfortable — dirty jollof, asun fried rice, yamarita — beside the
+              burgers and pastas people keep coming back for.
+            </p>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 26px;
+              "
+            >
+              <span class="tag tag-accent">All-day breakfast</span>
+              <span class="tag tag-outline">Fresh pastries</span>
+              <span class="tag tag-outline">Cocktails &amp; mocktails</span>
+              <span class="tag tag-outline">Free wifi</span>
+            </div>
+          </div>
+          <figure
+            style="
+              border-radius: var(--radius-lg);
+              overflow: hidden;
+              aspect-ratio: 4/5;
+              max-height: 560px;
+            "
+          >
+            <img
+              src="img/wings.png"
+              alt="Honey glazed wings with sweet potato fries"
+              style="width: 100%; height: 100%; object-fit: cover"
+            />
+          </figure>
+        </section>
+
+        <section
+          id="menu"
+          style="
+            padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px);
+            border-top: 1px solid var(--color-divider);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              align-items: end;
+              justify-content: space-between;
+              gap: 20px;
+              margin-bottom: clamp(28px, 4vw, 52px);
+            "
+          >
+            <div>
+              <h6 style="color: var(--color-accent-300); margin: 0 0 14px">
+                Kitchen
+              </h6>
+              <h2 style="font-size: clamp(28px, 3.4vw, 40px); margin: 0">
+                Food menu
+              </h2>
+            </div>
+            <p
+              style="
+                margin: 0;
+                color: var(--color-neutral-400);
+                font-size: 13px;
+                max-width: 34ch;
+              "
+            >
+              Prices in naira. Breakfast served all day; kitchen closes 10:30pm.
+            </p>
+          </div>
+          <div
+            style="display:grid; gap:clamp(28px,3vw,44px); grid-template-columns:{{ menuColumns }}"
+          >
+            <sc-for
+              list="{{ foodGroups }}"
+              as="group"
+              hint-placeholder-count="4"
+            >
+              <div style="break-inside: avoid">
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                    margin-bottom: 18px;
+                  "
+                >
+                  <h3
+                    style="
+                      font-size: 15px;
+                      letter-spacing: 0.18em;
+                      text-transform: uppercase;
+                      margin: 0;
+                      color: var(--color-text);
+                    "
+                  >
+                    {{ group.title }}
+                  </h3>
+                  <span
+                    style="
+                      flex: 1;
+                      height: 1px;
+                      background: linear-gradient(
+                        to right,
+                        var(--color-divider),
+                        transparent
+                      );
+                    "
+                  ></span>
+                </div>
+                <sc-for
+                  list="{{ group.items }}"
+                  as="item"
+                  hint-placeholder-count="5"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      gap: 16px;
+                      align-items: baseline;
+                      padding: 9px 0;
+                      border-bottom: 1px solid rgba(28, 35, 32, 0.08);
+                    "
+                  >
+                    <div style="flex: 1; min-width: 0">
+                      <div style="font-size: 16px; color: var(--color-text)">
+                        {{ item.n }}
+                      </div>
+                      <div
+                        style="
+                          font-size: 13px;
+                          color: var(--color-neutral-500);
+                          line-height: 1.5;
+                        "
+                      >
+                        {{ item.d }}
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        font-variant-numeric: tabular-nums;
+                        font-size: 15px;
+                        color: var(--color-accent-300);
+                        white-space: nowrap;
+                      "
+                    >
+                      {{ item.p }}
+                    </div>
+                  </div>
+                </sc-for>
+                <div
+                  style="
+                    font-size: 12px;
+                    color: var(--color-neutral-500);
+                    margin-top: 12px;
+                    letter-spacing: 0.04em;
+                  "
+                >
+                  {{ group.note }}
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section
+          id="drinks"
+          style="
+            padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px);
+            background: linear-gradient(
+              180deg,
+              var(--color-neutral-900),
+              var(--color-bg)
+            );
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              align-items: end;
+              justify-content: space-between;
+              gap: 20px;
+              margin-bottom: clamp(28px, 4vw, 52px);
+            "
+          >
+            <div>
+              <h6 style="color: var(--color-accent-300); margin: 0 0 14px">
+                Bar
+              </h6>
+              <h2 style="font-size: clamp(28px, 3.4vw, 40px); margin: 0">
+                Drinks
+              </h2>
+            </div>
+            <p
+              style="
+                margin: 0;
+                color: var(--color-neutral-400);
+                font-size: 13px;
+                max-width: 34ch;
+              "
+            >
+              Coffee from 8am. Cocktails from noon.
+            </p>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+              gap: clamp(20px, 2.4vw, 32px);
+            "
+          >
+            <sc-for
+              list="{{ drinkGroups }}"
+              as="group"
+              hint-placeholder-count="6"
+            >
+              <div
+                class="card"
+                style="
+                  background: var(--color-surface);
+                  border-radius: var(--radius-md);
+                  padding: 22px 22px 18px;
+                  box-shadow: var(--shadow-sm);
+                "
+              >
+                <h4
+                  style="
+                    font-size: 13px;
+                    letter-spacing: 0.16em;
+                    text-transform: uppercase;
+                    margin: 0 0 14px;
+                    color: var(--color-accent-300);
+                  "
+                >
+                  {{ group.title }}
+                </h4>
+                <sc-for
+                  list="{{ group.items }}"
+                  as="item"
+                  hint-placeholder-count="4"
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: baseline;
+                      gap: 10px;
+                      padding: 6px 0;
+                    "
+                  >
+                    <span style="font-size: 15px; color: var(--color-text)"
+                      >{{ item.n }}</span
+                    >
+                    <span
+                      style="
+                        flex: 1;
+                        border-bottom: 1px dotted var(--color-neutral-700);
+                        transform: translateY(-3px);
+                      "
+                    ></span>
+                    <span
+                      style="
+                        font-variant-numeric: tabular-nums;
+                        font-size: 14px;
+                        color: var(--color-neutral-300);
+                      "
+                      >{{ item.p }}</span
+                    >
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section
+          id="gallery"
+          style="
+            padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px);
+            border-top: 1px solid var(--color-divider);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              align-items: end;
+              justify-content: space-between;
+              gap: 20px;
+              margin-bottom: clamp(24px, 3vw, 40px);
+            "
+          >
+            <div>
+              <h6 style="color: var(--color-accent-300); margin: 0 0 14px">
+                On the pass
+              </h6>
+              <h2 style="font-size: clamp(28px, 3.4vw, 40px); margin: 0">
+                From the courtyard
+              </h2>
+            </div>
+            <a
+              href="https://www.instagram.com/thecourtyardcafeph?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+              style="font-size: 14px; letter-spacing: 0.06em"
+              >@thecourtyardcafe →</a
+            >
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: 14px;
+            "
+          >
+            <figure
+              style="
+                border-radius: var(--radius-md);
+                overflow: hidden;
+                aspect-ratio: 4/5;
+                grid-column: span 1;
+              "
+            >
+              <img
+                src="img/pasta.png"
+                alt="Asun pasta"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+            <figure
+              style="
+                border-radius: var(--radius-md);
+                overflow: hidden;
+                aspect-ratio: 4/5;
+              "
+            >
+              <img
+                src="img/springrolls.png"
+                alt="Spring rolls and samosa with pepper dip"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+            <figure
+              style="
+                border-radius: var(--radius-md);
+                overflow: hidden;
+                aspect-ratio: 4/5;
+              "
+            >
+              <img
+                src="img/wings.png"
+                alt="Honey glazed wings"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+            <figure
+              style="
+                border-radius: var(--radius-md);
+                overflow: hidden;
+                aspect-ratio: 4/5;
+              "
+            >
+              <img
+                src="img/breakfast.png"
+                alt="English breakfast"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+            <figure
+              style="
+                border-radius: var(--radius-md);
+                overflow: hidden;
+                aspect-ratio: 4/5;
+              "
+            >
+              <img
+                src="img/milkshake.png"
+                alt="Strawberry milkshake"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </figure>
+          </div>
+        </section>
+
+        <section
+          id="visit"
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: clamp(28px, 5vw, 72px);
+            padding: clamp(48px, 7vw, 96px) clamp(20px, 5vw, 72px);
+            background: var(--color-section);
+            background-image: radial-gradient(
+              120% 80% at 15% 0%,
+              rgba(168, 129, 63, 0.22),
+              transparent 70%
+            );
+          "
+        >
+          <div>
+            <h6 style="color: var(--color-accent-200); margin: 0 0 14px">
+              Visit
+            </h6>
+            <h2
+              style="
+                font-size: clamp(28px, 3.4vw, 40px);
+                margin: 0 0 22px;
+                text-wrap: balance;
+              "
+            >
+              Come sit under the ferns
+            </h2>
+            <p
+              style="
+                color: var(--color-neutral-200);
+                font-size: 16px;
+                line-height: 1.75;
+                max-width: 42ch;
+              "
+            >
+              Walk-ins welcome. For tables of six or more, or to hold the
+              courtyard for an evening, give us a call.
+            </p>
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-top: 26px;
+              "
+            >
+              <a href="tel:+2348000000000" class="btn btn-primary"
+                >+234 800 000 0000</a
+              >
+              <a href="mailto:hello@thecourtyard.ng" class="btn btn-ghost"
+                >hello@thecourtyard.ng</a
+              >
+            </div>
+          </div>
+          <div style="display: grid; gap: 24px; align-content: start">
+            <div>
+              <h4
+                style="
+                  font-size: 12px;
+                  letter-spacing: 0.18em;
+                  text-transform: uppercase;
+                  color: var(--color-accent-200);
+                  margin: 0 0 12px;
+                "
+              >
+                Hours
+              </h4>
+              <sc-for list="{{ hours }}" as="row" hint-placeholder-count="4">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+                    padding: 7px 0;
+                    border-bottom: 1px solid rgba(233, 233, 237, 0.14);
+                    font-size: 15px;
+                  "
+                >
+                  <span style="color: var(--color-neutral-200)"
+                    >{{ row.d }}</span
+                  >
+                  <span style="font-variant-numeric: tabular-nums; color: #fff"
+                    >{{ row.h }}</span
+                  >
+                </div>
+              </sc-for>
+            </div>
+            <div>
+              <h4
+                style="
+                  font-size: 12px;
+                  letter-spacing: 0.18em;
+                  text-transform: uppercase;
+                  color: var(--color-accent-200);
+                  margin: 0 0 12px;
+                "
+              >
+                Address
+              </h4>
+              <p
+                style="
+                  font-size: 16px;
+                  line-height: 1.7;
+                  color: var(--color-neutral-100);
+                  margin: 0;
+                "
+              >
+                Reef Court Estate<br />Port Harcourt, Rivers<br />Nigeria
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <footer
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 34px clamp(20px, 5vw, 72px);
+            border-top: 1px solid var(--color-divider);
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 14px">
+            <img
+              src="img/logo-dark.png"
+              alt=""
+              style="width: 34px; opacity: 0.75"
+            />
+            <span
+              style="
+                font-size: 12px;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--color-neutral-500);
+              "
+              >Where every moment blooms</span
+            >
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 24px;
+              font-size: 13px;
+              color: var(--color-neutral-500);
+            "
+          >
+            <a href="https://instagram.com">Instagram</a>
+            <a href="#menu">Menu</a>
+            <a href="#visit">Contact</a>
+            <span>© 2026 The Courtyard Cafe</span>
+          </div>
+        </footer>
+      </div>
+    </x-dc>
+    <script
+      type="text/x-dc"
+      data-dc-script
+      data-props='{"menuColumns":{"editor":"enum","options":[1,2],"default":2,"tsType":"number","section":"Menu"}}'
+    >
+      class Component extends DCLogic {
+        renderVals() {
+          const cols = this.props.menuColumns ?? 2;
+          const food = [
+            { title: "Breakfast", note: "Egg choices — scrambled, omelette, sunny side, boiled", items: [
+              { n: "English Breakfast", d: "Toast, eggs of choice, bacon, grilled tomatoes, mushroom, baked beans", p: "14,000" },
+              { n: "Courtyard Special", d: "French toast, eggs, mushroom, sausages, whipped cream and berries", p: "15,500" },
+              { n: "African Breakfast", d: "Akara, custard, toasted bread served with milk", p: "7,000" },
+              { n: "Buttermilk Pancakes", d: "With maple syrup", p: "6,000" },
+              { n: "Blueberry Pancakes", d: "Blueberry glaze and syrup", p: "7,500" },
+              { n: "Buttermilk Waffles", d: "With maple syrup", p: "7,000" },
+              { n: "Avocado Toast", d: "Toasted bread, avocado, sunny side up eggs", p: "7,500" } ] },
+            { title: "Lunch", note: "", items: [
+              { n: "Dirty Jollof", d: "Nigerian-style jollof with diced chicken, beef, vegetables and fried plantain", p: "13,000" },
+              { n: "Asun Fried Rice", d: "Spicy fried rice with goat meat, vegetables and egg", p: "12,000" },
+              { n: "Yamarita", d: "Fried coated yam served with egg sauce", p: "9,000" },
+              { n: "Beef Burger", d: "Beef patty, tomatoes, caramelised onions, cheese, lettuce, fries", p: "10,500" },
+              { n: "Citizens Burger", d: "Beef patty, bacon, caramelised onions, cheese, sausage, egg, fries", p: "12,000" },
+              { n: "Club Sandwich", d: "Grilled chicken, tomatoes, egg, lettuce and cream", p: "7,000" },
+              { n: "Tuna Sandwich", d: "Tuna, tomatoes, lettuce, cream", p: "5,700" },
+              { n: "Beef Penne Pasta", d: "Rich beef bolognese with vegetables", p: "14,000" },
+              { n: "Alfredo Penne Pasta", d: "Creamy chicken alfredo sauce", p: "16,000" },
+              { n: "Chicken Noodles", d: "Stir fry with green pepper, onions, grilled chicken", p: "5,800" },
+              { n: "Spicy Noodles", d: "Stir fry with extra pepper and spicy beef", p: "6,200" },
+              { n: "Special Noodles", d: "Beef, chicken, vegetables and choice of egg", p: "7,000" },
+              { n: "The Platter", d: "Spring roll, samosa, gizzard, fries, wings (5 pcs) and chicken", p: "19,000" },
+              { n: "Goat Meat Pepper Soup", d: "", p: "6,500" },
+              { n: "Chicken Pepper Soup", d: "", p: "6,000" } ] },
+            { title: "Salads", note: "", items: [
+              { n: "Chicken Salad", d: "Lettuce, sweet corn, cucumber, cherry tomatoes, grilled chicken", p: "10,500" },
+              { n: "Caesar Salad", d: "Lettuce, grilled chicken, croutons, caesar dressing, parmesan", p: "10,000" },
+              { n: "Avocado Salad", d: "Sweet corn, avocado, cucumber, cherry tomatoes, grilled prawns", p: "15,000" } ] },
+            { title: "Protein & wings", note: "Wing flavours — original, BBQ, honey garlic", items: [
+              { n: "Chicken Wings", d: "Regular pack, 5 pcs", p: "7,000" },
+              { n: "Chicken Wings", d: "Pro pack, 10 pcs", p: "12,000" },
+              { n: "Peppered Drumsticks", d: "", p: "6,500" },
+              { n: "Grilled Croaker", d: "", p: "9,500" },
+              { n: "Gizzard with Potato Fries", d: "", p: "19,000" } ] },
+            { title: "Pastries", note: "", items: [
+              { n: "Meat Pie", d: "", p: "1,200" },
+              { n: "Chicken Pie", d: "", p: "1,000" },
+              { n: "Blueberry Muffins", d: "", p: "900" },
+              { n: "Coco Muffins", d: "", p: "900" } ] },
+            { title: "Sides", note: "", items: [
+              { n: "French Fries", d: "", p: "3,000" },
+              { n: "Potato Fries", d: "", p: "3,000" },
+              { n: "Yam Fries", d: "", p: "3,000" },
+              { n: "White Rice", d: "", p: "2,500" } ] }
+          ];
+          const drinks = [
+            { title: "Cocktails", items: [
+              { n: "Long Island", p: "8,500" }, { n: "Margarita", p: "8,500" }, { n: "Chapman", p: "7,500" },
+              { n: "Screwdriver", p: "8,500" }, { n: "Mojito", p: "8,500" }, { n: "Tequila Sunrise", p: "8,500" } ] },
+            { title: "Mocktails", items: [
+              { n: "Chapman", p: "7,000" }, { n: "Tropical Sunset", p: "7,000" },
+              { n: "Passion Delight", p: "7,000" }, { n: "Lemonade", p: "6,500" } ] },
+            { title: "Hot drinks", items: [
+              { n: "Cappuccino", p: "3,000" }, { n: "Espresso", p: "2,500" }, { n: "Americano", p: "3,000" },
+              { n: "Latte", p: "3,000" }, { n: "Hot Chocolate", p: "3,500" } ] },
+            { title: "Cold drinks", items: [
+              { n: "Caramel Frappuccino", p: "7,000" }, { n: "Iced Latte", p: "6,000" }, { n: "Iced Matcha Latte", p: "6,500" } ] },
+            { title: "Milkshakes", items: [
+              { n: "Vanilla", p: "6,800" }, { n: "Strawberry", p: "6,800" }, { n: "Oreo", p: "7,500" } ] },
+            { title: "Others", items: [
+              { n: "Soda", p: "1,000" }, { n: "Energy drinks", p: "1,700" }, { n: "Beer", p: "2,000" },
+              { n: "Water", p: "1,000" }, { n: "Four Cousins wine", p: "18,000" } ] }
+          ];
+          return {
+            foodGroups: food,
+            drinkGroups: drinks,
+            menuColumns: cols === 1 ? "1fr" : "repeat(auto-fit,minmax(340px,1fr))",
+            hours: [
+              { d: "Monday – Thursday", h: "8:00 – 22:00" },
+              { d: "Friday", h: "8:00 – 23:00" },
+              { d: "Saturday", h: "9:00 – 23:00" },
+              { d: "Sunday", h: "10:00 – 21:00" }
+            ]
+          };
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "courtyard-cafe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site for The Courtyard Cafe — Port Harcourt",
+  "scripts": {
+    "predev": "node scripts/optimize-images.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/optimize-images.mjs && node scripts/make-og-image.mjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "images": "node scripts/optimize-images.mjs && node scripts/make-og-image.mjs"
+  },
+  "dependencies": {
+    "next": "^15.4.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "^15.4.0",
+    "sharp": "^0.34.2",
+    "typescript": "^5.8.3"
+  }
+}
