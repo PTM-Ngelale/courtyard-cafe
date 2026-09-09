@@ -39,6 +39,9 @@
   /* Elevation — one step only */
   --shadow-sm: 0 0 0 1px rgba(28, 35, 32, 0.1);
 
+  /* Motion — strong ease-out for arrivals */
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
   /* --font-inter is injected by next/font/google in src/app/layout.tsx */
   --font: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
     Roboto, Helvetica, Arial, sans-serif;
@@ -902,4 +905,84 @@ a:hover {
   line-height: 1.7;
   color: var(--cream-100);
   margin: 0;
+}
+
+/* =========================================================================
+   Scroll reveal
+   Sections settle in as they enter view; the hero staggers on first paint.
+   Gated on `.reveal-ready` (added by the init script in layout.tsx only when
+   motion is allowed) so no-JS and reduced-motion both render final state.
+   ========================================================================= */
+
+/* Block reveals (sections, hero photos): transform + opacity only — cheap to
+   composite even on the tall menu/drinks sections. */
+.reveal-ready [data-reveal],
+.reveal-ready [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 560ms var(--reveal-ease),
+    transform 560ms var(--reveal-ease), filter 460ms var(--reveal-ease);
+}
+
+.reveal-ready [data-reveal].is-visible,
+.reveal-ready [data-reveal-stagger].is-visible > * {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* Small staggered elements also get a soft blur (a "materialising" feel that
+   would be wasteful on a full-height section). */
+.reveal-ready [data-reveal-stagger] > * {
+  filter: blur(3px);
+}
+
+/* Hero copy: shorter move, quicker, and stepped child by child */
+.reveal-ready .hero__text[data-reveal-stagger] > * {
+  transform: translateY(8px);
+  transition-duration: 460ms;
+}
+.reveal-ready .hero__text.is-visible > *:nth-child(2) {
+  transition-delay: 55ms;
+}
+.reveal-ready .hero__text.is-visible > *:nth-child(3) {
+  transition-delay: 110ms;
+}
+.reveal-ready .hero__text.is-visible > *:nth-child(4) {
+  transition-delay: 165ms;
+}
+.reveal-ready .hero__text.is-visible > *:nth-child(5) {
+  transition-delay: 220ms;
+}
+.reveal-ready .hero__text.is-visible > *:nth-child(6) {
+  transition-delay: 275ms;
+}
+
+/* Hero photos arrive just after the copy begins */
+.reveal-ready .hero__photos[data-reveal] {
+  transition-delay: 150ms;
+}
+
+/* Gallery figures tile in when the grid scrolls into view */
+.reveal-ready .gallery-grid.is-visible > *:nth-child(2) {
+  transition-delay: 50ms;
+}
+.reveal-ready .gallery-grid.is-visible > *:nth-child(3) {
+  transition-delay: 100ms;
+}
+.reveal-ready .gallery-grid.is-visible > *:nth-child(4) {
+  transition-delay: 150ms;
+}
+.reveal-ready .gallery-grid.is-visible > *:nth-child(5) {
+  transition-delay: 200ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready [data-reveal],
+  .reveal-ready [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
 }

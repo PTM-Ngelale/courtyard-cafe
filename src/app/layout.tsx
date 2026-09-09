@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { site, contact, openingHoursSpecification } from "@/data/site";
+import { RevealMotion } from "@/components/RevealMotion";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -72,17 +73,32 @@ const jsonLd = {
   hasMenu: `${site.url}/#menu`,
 };
 
+/**
+ * Marks the document `reveal-ready` during HTML parse — before the sections
+ * paint — so they start hidden with no flash. Bails under prefers-reduced-
+ * motion: the hide-until-revealed CSS is gated on this class, so reduced-motion
+ * and no-JS both render every section in its final state. The class is added
+ * before hydration, so `<html>` carries `suppressHydrationWarning`. The
+ * per-element `is-visible` toggling happens after hydration in <RevealMotion>.
+ */
+const revealScript =
+  "(function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;" +
+  "document.documentElement.classList.add('reveal-ready');}catch(e){}})();";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body>
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* eslint-disable-next-line react/no-danger */}
+        <script dangerouslySetInnerHTML={{ __html: revealScript }} />
+        <RevealMotion />
         {children}
       </body>
     </html>

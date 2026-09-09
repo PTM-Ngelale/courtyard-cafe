@@ -31,7 +31,7 @@ export default function HomePage() {
         <section className="hero">
           <div className="hero__glow" aria-hidden="true" />
 
-          <div className="hero__text">
+          <div className="hero__text" data-reveal-stagger>
             <Logo
               className="hero__mark"
               alt=""
@@ -57,7 +57,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="hero__photos">
+          <div className="hero__photos" data-reveal>
             <figure className="hero__photo">
               <Photo
                 name="breakfast"
@@ -78,7 +78,11 @@ export default function HomePage() {
         </section>
 
         {/* ===================== About ===================== */}
-        <section id="about" className="section section--bordered about">
+        <section
+          id="about"
+          className="section section--bordered about"
+          data-reveal
+        >
           <div className="about__text">
             <p className="kicker">The cafe</p>
             <h2 className="about__title">
@@ -112,7 +116,7 @@ export default function HomePage() {
         </section>
 
         {/* ===================== Food menu ===================== */}
-        <section id="menu" className="section section--bordered">
+        <section id="menu" className="section section--bordered" data-reveal>
           <div className="section-head">
             <div>
               <p className="kicker">Kitchen</p>
@@ -128,7 +132,7 @@ export default function HomePage() {
         </section>
 
         {/* ===================== Drinks ===================== */}
-        <section id="drinks" className="section drinks">
+        <section id="drinks" className="section drinks" data-reveal>
           <div className="section-head">
             <div>
               <p className="kicker">Bar</p>
@@ -145,7 +149,7 @@ export default function HomePage() {
 
         {/* ===================== Gallery ===================== */}
         <section id="gallery" className="section section--bordered">
-          <div className="section-head">
+          <div className="section-head" data-reveal>
             <div>
               <p className="kicker">On the pass</p>
               <h2>From the courtyard</h2>
@@ -159,7 +163,7 @@ export default function HomePage() {
               {contact.instagramHandle} →
             </a>
           </div>
-          <div className="gallery-grid">
+          <div className="gallery-grid" data-reveal-stagger>
             {GALLERY.map((photo, i) => (
               <figure className="gallery__figure" key={`${photo.name}-${i}`}>
                 <Photo
@@ -173,7 +177,7 @@ export default function HomePage() {
         </section>
 
         {/* ===================== Visit (dark band) ===================== */}
-        <section id="visit" className="section visit on-dark">
+        <section id="visit" className="section visit on-dark" data-reveal>
           <div className="visit__intro">
             <p className="kicker visit__kicker">Visit</p>
             <h2 className="visit__title">Come sit under the ferns</h2>
