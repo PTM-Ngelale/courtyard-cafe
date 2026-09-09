@@ -199,8 +199,30 @@ export default function HomePage() {
                 variant="ghost"
                 target="_blank"
                 rel="noopener noreferrer me"
+                aria-label={`The Courtyard Cafe on Instagram (${contact.instagramHandle})`}
+                className="btn--icon"
               >
-                {contact.instagramHandle}
+                <svg
+                  viewBox="0 0 256 256"
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={16}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="36" y="36" width="184" height="184" rx="48" />
+                  <circle cx="128" cy="128" r="40" />
+                  <circle
+                    cx="180"
+                    cy="75.9"
+                    r="10"
+                    fill="currentColor"
+                    stroke="none"
+                  />
+                </svg>
               </Button>
             </div>
           </div>
