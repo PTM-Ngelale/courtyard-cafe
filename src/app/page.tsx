@@ -199,13 +199,11 @@ export default function HomePage() {
                 variant="ghost"
                 target="_blank"
                 rel="noopener noreferrer me"
-                aria-label={`The Courtyard Cafe on Instagram (${contact.instagramHandle})`}
-                className="btn--icon"
               >
                 <svg
                   viewBox="0 0 256 256"
-                  width="20"
-                  height="20"
+                  width="18"
+                  height="18"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth={16}
@@ -223,6 +221,7 @@ export default function HomePage() {
                     stroke="none"
                   />
                 </svg>
+                {contact.instagramHandle}
               </Button>
             </div>
           </div>

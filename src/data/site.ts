@@ -1,9 +1,9 @@
 /**
  * Single source of truth for business / contact details.
  *
- * Address, phone number and opening hours are the cafe's real details.
- * Still to replace before launch: the email address, the real Instagram URL,
- * and `site.url` (the production domain).
+ * Address, phone, opening hours and the Instagram link are the cafe's real
+ * details. `email` is intentionally blank (the Visit button and JSON-LD both
+ * drop it when empty). Still to set before launch: `site.url` (production domain).
  */
 
 export const site = {
@@ -28,7 +28,7 @@ export const contact = {
   email: "",
   instagramUrl:
     "https://www.instagram.com/thecourtyardcafeph?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==",
-  instagramHandle: "@thecourtyardcafe",
+  instagramHandle: "@thecourtyardcafeph",
 };
 
 /** Short lines that paraphrase the hours in prose. Keep in sync with `hours`. */

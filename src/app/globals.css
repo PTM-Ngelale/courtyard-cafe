@@ -221,16 +221,9 @@ a:hover {
   color: var(--ink-2);
 }
 
-/* Icon-only button — square-ish, glyph centred. Height still matches its
-   text-label neighbours via the actions row's default align-items: stretch. */
-.btn--icon {
-  padding-left: 11px;
-  padding-right: 11px;
-  justify-content: center;
-}
-
-.btn--icon svg {
+.btn svg {
   display: block;
+  flex-shrink: 0;
 }
 
 /* Dark-ground retint (Visit section). Fixes prototype known-issue #1. */
