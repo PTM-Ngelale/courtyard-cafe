@@ -25,7 +25,7 @@ export const contact = {
   addressCountry: "NG",
   phoneDisplay: "0704 900 4617",
   phoneHref: "tel:+2347049004617",
-  email: "hello@thecourtyard.ng",
+  email: "",
   instagramUrl:
     "https://www.instagram.com/thecourtyardcafeph?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==",
   instagramHandle: "@thecourtyardcafe",

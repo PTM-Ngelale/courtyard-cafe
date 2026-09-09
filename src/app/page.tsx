@@ -189,9 +189,11 @@ export default function HomePage() {
               <Button href={contact.phoneHref} variant="primary">
                 {contact.phoneDisplay}
               </Button>
-              <Button href={`mailto:${contact.email}`} variant="ghost">
-                {contact.email}
-              </Button>
+              {contact.email ? (
+                <Button href={`mailto:${contact.email}`} variant="ghost">
+                  {contact.email}
+                </Button>
+              ) : null}
             </div>
           </div>
 

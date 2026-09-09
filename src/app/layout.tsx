@@ -60,7 +60,7 @@ const jsonLd = {
   servesCuisine: ["Breakfast", "West African", "Cafe", "Cocktails"],
   priceRange: "₦₦",
   telephone: contact.phoneDisplay,
-  email: contact.email,
+  ...(contact.email ? { email: contact.email } : {}),
   address: {
     "@type": "PostalAddress",
     streetAddress: contact.streetAddress,

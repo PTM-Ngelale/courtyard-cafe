@@ -38,16 +38,18 @@ idempotent, so they're cheap to leave in place.
 | `public/img/`, `public/og-image.jpg` | Generated, committed image assets |
 | `public/favicon.svg` | Favicon |
 
-## ⚠️ Before launch — replace remaining placeholder data
+## ⚠️ Before launch — remaining placeholder data
 
-All in **`src/data/site.ts`**. Address, phone and opening hours are now the real
-details; still outstanding:
+All in **`src/data/site.ts`**. Address, phone, opening hours and the Instagram
+link are the real details; still outstanding:
 
 | Field | Placeholder |
 | --- | --- |
-| Email | hello@thecourtyard.ng |
-| Instagram | `https://instagram.com` (handle text `@thecourtyardcafe`) |
 | `site.url` | `https://www.thecourtyard.ng` — set to the real domain (drives canonical + OG URLs) |
+
+`contact.email` is intentionally blank — the Visit section drops the email
+button and the JSON-LD omits `email` when it's empty. Set it in `site.ts` to
+bring the button back.
 
 `hoursSummary` in the same file holds the prose hours lines shown in the hero and
 the menu / drinks sublines — keep them in sync if the hours ever change.
