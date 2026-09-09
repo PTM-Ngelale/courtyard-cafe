@@ -3,8 +3,8 @@
  * `public/img/`, so the static export can serve small images without the Next
  * Image Optimization server.
  *
- *   <name>-<width>.webp   for each width in PHOTO_WIDTHS
- *   logo-dark-<width>.webp for each width in LOGO_WIDTHS
+ *   <name>-<width>.webp   photos (PHOTO_WIDTHS), logos (LOGO_WIDTHS),
+ *                        and the nanotek wordmark (WORDMARK_WIDTHS)
  *
  * Idempotent: a variant is skipped when it already exists and is newer than
  * its source. Run: node scripts/optimize-images.mjs  (also wired to pre{dev,build})
@@ -20,9 +20,12 @@ const outDir = path.join(root, 'public/img');
 
 const PHOTO_WIDTHS = [400, 700, 1000, 1400];
 const LOGO_WIDTHS = [128, 256];
+// The nanotek wordmark is wide (~4.7:1); it only ever renders small in the footer.
+const WORDMARK_WIDTHS = [180, 360];
 
 const PHOTOS = ['breakfast', 'milkshake', 'wings', 'pasta', 'springrolls'];
 const LOGOS = ['logo-dark', 'logo-light'];
+const WORDMARKS = ['nanotek-logo'];
 
 async function newer(a, b) {
   try {
@@ -56,6 +59,9 @@ for (const name of PHOTOS) {
 }
 for (const name of LOGOS) {
   total += await emit(name, LOGO_WIDTHS, { quality: 90, effort: 6 });
+}
+for (const name of WORDMARKS) {
+  total += await emit(name, WORDMARK_WIDTHS, { quality: 90, effort: 6 });
 }
 
 const files = (await readdir(outDir)).length;

@@ -417,12 +417,49 @@ a:hover {
 /* ---- Footer ---- */
 .site-footer {
   display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 34px clamp(20px, 5vw, 72px);
+  border-top: 1px solid var(--divider);
+}
+
+.site-footer__inner {
+  display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 34px clamp(20px, 5vw, 72px);
-  border-top: 1px solid var(--divider);
+}
+
+/* Agency credit — quiet, sits below the footer row, aligned with the meta cluster */
+.site-footer__credit {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-4);
+  opacity: 0.68;
+  transition: opacity 120ms ease;
+}
+
+.site-footer__credit:hover {
+  opacity: 1;
+  color: var(--ink-4);
+}
+
+.site-footer__credit img {
+  height: 14px;
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 560px) {
+  .site-footer__credit {
+    align-self: center;
+  }
 }
 
 .site-footer__brand {
