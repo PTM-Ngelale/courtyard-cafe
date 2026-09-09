@@ -194,6 +194,14 @@ export default function HomePage() {
                   {contact.email}
                 </Button>
               ) : null}
+              <Button
+                href={contact.instagramUrl}
+                variant="ghost"
+                target="_blank"
+                rel="noopener noreferrer me"
+              >
+                {contact.instagramHandle}
+              </Button>
             </div>
           </div>
 
