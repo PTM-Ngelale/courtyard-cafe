@@ -3,11 +3,11 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/Button";
 import { Tag } from "@/components/Tag";
-import { MenuGroup } from "@/components/MenuGroup";
+import { MenuGroup, MenuMark, MARK_LABELS } from "@/components/MenuGroup";
 import { DrinkCard } from "@/components/DrinkCard";
 import { Photo } from "@/components/Photo";
 import { Logo } from "@/components/Logo";
-import { foodGroups, drinkGroups } from "@/data/menu";
+import { foodGroups, drinkGroups, type MenuMark as MenuMarkKind } from "@/data/menu";
 import { contact, hours, hoursSummary } from "@/data/site";
 
 const GALLERY: {
@@ -96,7 +96,7 @@ export default function HomePage() {
             </p>
             <p className="prose">
               Breakfast runs all morning. Lunch is mostly the comfort food we
-              grew up on — dirty jollof, asun fried rice, yamarita — alongside
+              grew up on — smoky jollof, asun fried rice, yamarita — alongside
               the burgers and pasta people keep coming back for.
             </p>
             <div className="about__tags">
@@ -129,6 +129,14 @@ export default function HomePage() {
               <MenuGroup key={group.title} group={group} />
             ))}
           </div>
+          <p className="menu-legend">
+            {(Object.keys(MARK_LABELS) as MenuMarkKind[]).map((mark) => (
+              <span key={mark}>
+                <MenuMark mark={mark} />
+                {MARK_LABELS[mark]}
+              </span>
+            ))}
+          </p>
         </section>
 
         {/* ===================== Drinks ===================== */}

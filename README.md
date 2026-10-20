@@ -32,7 +32,7 @@ idempotent, so they're cheap to leave in place.
 | `src/app/layout.tsx` | `<head>`: metadata (OG/Twitter), favicon, Inter via `next/font`, `CafeOrCoffeeShop` JSON-LD |
 | `src/app/globals.css` | Design tokens, reset, `.btn` / `.tag` primitives, and every section/component style |
 | `src/components/` | `Header` (client — mobile nav), `Footer`, `Button`, `Tag`, `MenuGroup`, `DrinkCard`, `Photo`, `Logo` |
-| `src/data/menu.ts` | Food + drinks, transcribed verbatim from the printed menu boards |
+| `src/data/menu.ts` | Food (from the updated October 2026 printed menu) + drinks (from the earlier menu boards), transcribed verbatim |
 | `src/data/site.ts` | Business + contact details, hours, and the JSON-LD hours spec |
 | `src/assets/img/` | Original logo + photography (source for the optimize script) |
 | `public/img/`, `public/og-image.jpg` | Generated, committed image assets |
