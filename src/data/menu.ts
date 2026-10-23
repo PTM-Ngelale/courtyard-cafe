@@ -364,3 +364,17 @@ export const drinkGroups: MenuGroup[] = [
     ],
   },
 ];
+
+/**
+ * How the food menu is split into tabs on the site, by group title, in display
+ * order. Any group not listed here still shows, at the end of the last tab.
+ */
+export const foodSections: { id: string; label: string; groups: string[] }[] = [
+  { id: 'breakfast', label: 'Breakfast', groups: ['All-day breakfast', 'Breakfast add-ons', 'Freshly baked'] },
+  { id: 'mains', label: 'Mains', groups: ['Rice & local favourites', 'Noodles & pasta', 'Signature mains', 'Burgers & sandwiches'] },
+  { id: 'platters', label: 'Platters & salads', groups: ['Sharing platters', 'Salads'] },
+  { id: 'extras', label: 'Sides & extras', groups: ['Proteins & extras', 'Sides'] },
+];
+
+/** Drinks in serving order: coffee from the moment we open, cocktails from noon. */
+export const drinkOrder = ['Hot drinks', 'Cold drinks', 'Milkshakes', 'Mocktails', 'Cocktails', 'Others'];
