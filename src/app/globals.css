@@ -1051,3 +1051,59 @@ a:hover {
     aspect-ratio: 4 / 5;
   }
 }
+
+/* ===================== Food menu tabs ===================== */
+.menu-tabs__list {
+  display: flex;
+  gap: 10px;
+  margin-bottom: clamp(26px, 3vw, 40px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.menu-tabs__list::-webkit-scrollbar {
+  display: none;
+}
+.menu-tabs__tab {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(28, 35, 32, 0.22);
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.menu-tabs__tab:hover {
+  border-color: var(--gold);
+  color: var(--gold-deep);
+}
+.menu-tabs__tab[aria-selected='true'] {
+  background: rgba(168, 129, 63, 0.14);
+  border-color: rgba(168, 129, 63, 0.45);
+  color: var(--gold-deep);
+}
+.menu-tabs__tab:focus-visible,
+.menu-panel:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+.menu-tabs__count {
+  font-size: 11px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+/* groups flow down balanced columns, so short and long groups pack without gaps */
+.menu-panel {
+  columns: 3 320px;
+  column-gap: clamp(28px, 3vw, 44px);
+}
+.menu-panel .menu-group {
+  margin-bottom: clamp(28px, 3vw, 40px);
+}

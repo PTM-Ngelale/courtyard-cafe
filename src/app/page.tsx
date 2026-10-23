@@ -3,12 +3,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/Button";
 import { Tag } from "@/components/Tag";
-import { MenuGroup, MenuMark, MARK_LABELS } from "@/components/MenuGroup";
+import { MenuMark, MARK_LABELS } from "@/components/MenuGroup";
 import { DrinkCard } from "@/components/DrinkCard";
 import { Photo } from "@/components/Photo";
 import { Logo } from "@/components/Logo";
 import { Venue3D } from "@/components/Venue3D";
-import { foodGroups, drinkGroups, type MenuMark as MenuMarkKind } from "@/data/menu";
+import { foodGroups, drinkGroups, foodSections, drinkOrder, type MenuMark as MenuMarkKind } from "@/data/menu";
+import { MenuTabs, type MenuSection } from "@/components/MenuTabs";
 import { contact, hours, hoursSummary } from "@/data/site";
 
 const GALLERY: {
@@ -21,6 +22,26 @@ const GALLERY: {
   { name: "breakfast", alt: "English breakfast" },
   { name: "milkshake", alt: "Strawberry milkshake" },
 ];
+
+// Food groups arranged into the site's tabs; anything unassigned joins the last tab so no dish disappears.
+const MENU_SECTIONS: MenuSection[] = (() => {
+  const byTitle = new Map(foodGroups.map((g) => [g.title, g]));
+  const sections = foodSections.map((s) => ({
+    id: s.id,
+    label: s.label,
+    groups: s.groups.flatMap((t) => {
+      const g = byTitle.get(t);
+      byTitle.delete(t);
+      return g ? [g] : [];
+    }),
+  }));
+  sections[sections.length - 1].groups.push(...byTitle.values());
+  return sections;
+})();
+
+const DRINKS = [...drinkGroups].sort(
+  (a, b) => (drinkOrder.indexOf(a.title) + 1 || 99) - (drinkOrder.indexOf(b.title) + 1 || 99),
+);
 
 export default function HomePage() {
   return (
@@ -125,11 +146,7 @@ export default function HomePage() {
             </div>
             <p className="section-subline">{hoursSummary.kitchen}</p>
           </div>
-          <div className="menu-grid">
-            {foodGroups.map((group) => (
-              <MenuGroup key={group.title} group={group} />
-            ))}
-          </div>
+          <MenuTabs sections={MENU_SECTIONS} />
           <p className="menu-legend">
             {(Object.keys(MARK_LABELS) as MenuMarkKind[]).map((mark) => (
               <span key={mark}>
@@ -150,7 +167,7 @@ export default function HomePage() {
             <p className="section-subline">{hoursSummary.bar}</p>
           </div>
           <div className="drinks-grid">
-            {drinkGroups.map((group) => (
+            {DRINKS.map((group) => (
               <DrinkCard key={group.title} group={group} />
             ))}
           </div>
