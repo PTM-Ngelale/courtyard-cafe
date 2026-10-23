@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Courtyard Cafe 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<!--
+  10-second looping 3D animation of The Courtyard Cafe (Port Harcourt), made for a vertical 9:16 video.
+  Layout follows the owner's sketch: cafe with the kitchen extension behind it and the entrance on its left end,
+  umbrella sit-out to the left, lawn at the front, thatched bush bar front-right.
+  Embedded copy for the venue's own website (from nanotekai.com/motion/).
+  Query params:
+    ?still=4.2   freeze the clock at 4.2s (for screenshots)
+    ?noao        skip the GTAO pass (faster on weak GPUs)
+-->
+<style>
+  :root {
+    --bg: #f7f2ef;
+    --ink: #1c2320;
+    --ink-3: #6d746e;
+    --gold: #a8813f;
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  .card {
+    position: fixed; left: 50%; top: 5vh; transform: translateX(-50%);
+    width: min(84vw, 46vh); box-sizing: border-box;
+    padding: 2.2vh 2.4vh 2vh; border-radius: 2.4vh;
+    background: rgba(255, 251, 249, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0.2vh 0 rgba(255, 255, 255, 0.8) inset, 0 1.6vh 4.5vh rgba(28, 35, 32, 0.12);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    font-family: "Inter", system-ui, sans-serif; color: var(--ink);
+    text-align: center;
+    opacity: 0; translate: 0 -1.5vh;
+    transition: opacity .7s cubic-bezier(.2,.8,.2,1) .9s, translate .7s cubic-bezier(.2,.8,.2,1) .9s;
+  }
+  .card.in { opacity: 1; translate: 0 0; }
+  .sprig { display: block; width: 2.6vh; height: 2.6vh; margin: 0 auto .8vh; color: var(--gold); }
+  .eyebrow { font: 500 1.05vh "Inter", sans-serif; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-3); }
+  .title { margin: .5vh 0 0; font: 600 3.4vh/1 "Cormorant Garamond", serif; letter-spacing: .14em; text-transform: uppercase; }
+  .tag { margin-top: .5vh; font: italic 500 1.75vh "Cormorant Garamond", serif; color: var(--gold); }
+  /* studio credit, bottom-right */
+  .credit {
+    position: fixed; right: 2.2vh; bottom: 2vh; z-index: 5;
+    display: inline-flex; align-items: center; gap: .8vh;
+    font: 500 1.3vh "Inter", system-ui, sans-serif; letter-spacing: .02em; color: var(--ink-3);
+    text-decoration: none; opacity: .72; transition: opacity .2s ease;
+  }
+  .credit:hover, .credit:focus-visible { opacity: 1; }
+  .credit img { height: 1.7vh; width: auto; display: block; }
+  /* embedded in the venue's own site: its section heading replaces this card */
+  .card { display: none !important; }
+</style>
+</head>
+<body>
+<a class="credit" href="https://nanotekai.com" target="_blank" rel="noopener">Powered by <img src="logo-navy.png" alt="NanoTek" /></a>
+<div class="card" id="card">
+  <svg class="sprig" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true">
+    <path d="M12 22V4" />
+    <path d="M12 6c-2.6-.3-3.8-2-3.6-4.2 2.4.1 3.6 1.8 3.6 4.2Z" fill="currentColor" fill-opacity=".25" />
+    <path d="M12 10.5c-3.2-.2-4.8-2.3-4.6-5 2.9.2 4.6 2.2 4.6 5Z" fill="currentColor" fill-opacity=".25" />
+    <path d="M12 10.5c3.2-.2 4.8-2.3 4.6-5-2.9.2-4.6 2.2-4.6 5Z" fill="currentColor" fill-opacity=".25" />
+    <path d="M12 15.5c-3.4-.1-5.2-2.4-5-5.3 3.1.2 5 2.4 5 5.3Z" fill="currentColor" fill-opacity=".25" />
+    <path d="M12 15.5c3.4-.1 5.2-2.4 5-5.3-3.1.2-5 2.4-5 5.3Z" fill="currentColor" fill-opacity=".25" />
+  </svg>
+  <div class="eyebrow">Café &amp; Kitchen · Port Harcourt</div>
+  <h1 class="title">The Courtyard</h1>
+  <div class="tag">where every moment blooms</div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+const params = new URLSearchParams(location.search);
+const STILL = params.has("still") ? parseFloat(params.get("still")) : null;
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const LOOP = 10; // seconds
+
+// Palette: Courtyard cream, ink green and gold, plus garden greens, thatch and a soft bloom pink.
+const C = {
+  slab: 0xfffbf9, slabSide: 0xe6ddd5, paving: 0xf4ece7, tile: 0xeadfd4, path: 0xe8dccf, lawn: 0xcfe0c4,
+  ink: 0x1c2320, roof: 0x2c3a33, cream: 0xfffdfc, wall: 0xf4ece7,
+  gold: 0xa8813f, goldLight: 0xe8d3ab, wood: 0xb8944f, woodDark: 0x7a5a36, thatch: 0xc9a466, thatchDark: 0xa98548,
+  green: 0x5f9a58, greenDark: 0x3f7444, fern: 0x6fae5f, hedge: 0x4f8a4c,
+  glass: 0xf3e2bf, pink: 0xf2a7a0, white: 0xffffff, skin: 0xb57c55, trunk: 0x8a6a4a, steel: 0x9aa0a6,
+};
+
+// ---------- renderer / scene ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: STILL !== null });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+// Pre-tone-mapping value so the ACES output lands on the brand cream (#f7f2ef).
+scene.background = new THREE.Color(2.4, 2.22, 2.08);
+
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.1, 300);
+const target = new THREE.Vector3(0, 1.2, 0);
+// Camera sits mostly in front (+z), a little to the left so the cafe entrance shows, so the sketch reads the same way up on screen.
+const VIEW = -0.22;
+function fitDist() {
+  const half = THREE.MathUtils.degToRad(camera.fov / 2);
+  const byWidth = 9.9 / Math.tan(Math.atan(Math.tan(half) * camera.aspect));
+  const byHeight = 9.3 / Math.tan(half);
+  return Math.max(byWidth, byHeight);
+}
+function frameView() {
+  camera.aspect = innerWidth / innerHeight;
+  camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+}
+frameView();
+
+scene.add(new THREE.HemisphereLight(0xfff8ee, 0xd8cbbd, 1.6));
+const sun = new THREE.DirectionalLight(0xfff1dc, 2.7);
+sun.position.set(9, 16, 6);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -13, right: 13, top: 13, bottom: -13, near: 1, far: 50 });
+sun.shadow.radius = 4;
+sun.shadow.bias = -0.0006;
+sun.shadow.normalBias = 0.02;
+scene.add(sun);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+if (!params.has("noao")) {
+  const ao = new GTAOPass(scene, camera, innerWidth, innerHeight);
+  ao.updateGtaoMaterial({ radius: 0.5, distanceFallOff: 1, thickness: 1 });
+  ao.blendIntensity = 0.85;
+  composer.addPass(ao);
+}
+composer.addPass(new OutputPass());
+
+// ---------- helpers ----------
+const mats = new Map();
+const mat = (color, extra = {}) => {
+  const key = color + JSON.stringify(extra);
+  if (!mats.has(key)) mats.set(key, new THREE.MeshStandardMaterial({ color, roughness: 0.62, metalness: 0.02, ...extra }));
+  return mats.get(key);
+};
+const glow = (color, intensity = 1) => mat(color, { emissive: color, emissiveIntensity: intensity });
+const geos = new Map();
+const rgeo = (w, h, d, r) => {
+  const key = [w, h, d, r].join();
+  if (!geos.has(key)) geos.set(key, new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 2, h / 2, d / 2) * 0.999));
+  return geos.get(key);
+};
+// Rounded box sitting on y=0 at its local origin (bottom-anchored).
+function rbox(w, h, d, color, { r = 0.08, x = 0, y = 0, z = 0, parent, m } = {}) {
+  const mesh = new THREE.Mesh(rgeo(w, h, d, r), m || mat(color));
+  mesh.position.set(x, y + h / 2, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function ball(rad, color, { x = 0, y = 0, z = 0, parent, m, seg = 16 } = {}) {
+  const mesh = new THREE.Mesh(new THREE.SphereGeometry(rad, seg, Math.round(seg * 0.7)), m || mat(color));
+  mesh.position.set(x, y, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function cyl(rt, rb, h, color, { x = 0, y = 0, z = 0, parent, m, seg = 24 } = {}) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), m || mat(color));
+  mesh.position.set(x, y + h / 2, z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  if (parent) parent.add(mesh);
+  return mesh;
+}
+function person(color, { seated = false } = {}) {
+  const g = new THREE.Group();
+  const b = new THREE.Mesh(new THREE.CapsuleGeometry(0.1, seated ? 0.18 : 0.24, 4, 10), mat(color));
+  b.position.y = seated ? 0.52 : 0.24; b.castShadow = true;
+  g.add(b);
+  ball(0.085, C.skin, { y: seated ? 0.78 : 0.52, parent: g, seg: 12 });
+  return g;
+}
+
+// Build-in registry: every piece rises and pops with a little overshoot during the first second.
+const pieces = [];
+function piece(obj, delay) {
+  obj.userData.baseY = obj.position.y;
+  obj.userData.baseScale = obj.scale.clone();
+  obj.userData.delay = delay;
+  pieces.push(obj);
+  scene.add(obj);
+  return obj;
+}
+const easeOutBack = (t, s = 1.9) => 1 + (s + 1) * Math.pow(t - 1, 3) + s * Math.pow(t - 1, 2);
+const smooth = (t) => t * t * (3 - 2 * t);
+const clamp01 = (t) => Math.min(1, Math.max(0, t));
+const TAU = Math.PI * 2;
+// Seeded random so every render places the flowers the same way.
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+
+function roundedRectPath(cx, cz, ax, az, r, n = 160) {
+  const kx = ax - r, kz = az - r, Lx = 2 * kx, Lz = 2 * kz, Q = (TAU * r) / 4;
+  const segs = [
+    [Lz, (u) => [ax, -kz + u * Lz]],
+    [Q, (u) => [kx + r * Math.cos(u * Math.PI / 2), kz + r * Math.sin(u * Math.PI / 2)]],
+    [Lx, (u) => [kx - u * Lx, az]],
+    [Q, (u) => [-kx + r * Math.cos(Math.PI / 2 + u * Math.PI / 2), kz + r * Math.sin(Math.PI / 2 + u * Math.PI / 2)]],
+    [Lz, (u) => [-ax, kz - u * Lz]],
+    [Q, (u) => [-kx + r * Math.cos(Math.PI + u * Math.PI / 2), -kz + r * Math.sin(Math.PI + u * Math.PI / 2)]],
+    [Lx, (u) => [-kx + u * Lx, -az]],
+    [Q, (u) => [kx + r * Math.cos(1.5 * Math.PI + u * Math.PI / 2), -kz + r * Math.sin(1.5 * Math.PI + u * Math.PI / 2)]],
+  ];
+  const perim = segs.reduce((a, s) => a + s[0], 0), pts = [];
+  for (let i = 0; i < n; i++) {
+    let s = (i / n) * perim;
+    for (let j = 0; j < 8; j++) {
+      if (s <= segs[j][0] || j === 7) { const [x, z] = segs[j][1](Math.min(1, s / segs[j][0])); pts.push(new THREE.Vector3(cx + x, 0, cz + z)); break; }
+      s -= segs[j][0];
+    }
+  }
+  return new THREE.CatmullRomCurve3(pts, true, "centripetal");
+}
+
+// ---------- the world ----------
+// Layout (from the sketch, top of the page = back of the diorama):
+//   back-centre/right: kitchen, with the cafe directly in front of it; cafe entrance on its left end
+//   left: umbrella sit-out          front-left: lawn          front-right: thatched bush bar
+const GY = 0.2; // compound floor height
+
+const slab = new THREE.Group();
+rbox(17, 0.9, 17, 0, { r: 0.6, y: -0.9, parent: slab, m: mat(C.slabSide) });
+rbox(16.6, 0.12, 16.6, C.slab, { r: 0.06, y: -0.12, parent: slab });
+rbox(15.4, 0.2, 15.4, C.paving, { r: 0.1, y: 0, parent: slab });
+piece(slab, 0);
+
+// --- Kitchen: a single-storey extension off the back of the cafe (same walls and roof, a step lower)
+const kitchen = new THREE.Group();
+rbox(6.8, 2.1, 2.2, C.wall, { r: 0.1, parent: kitchen });
+rbox(7.1, 0.2, 2.4, C.roof, { r: 0.06, y: 2.1, z: -0.1, parent: kitchen });
+// extractor vents and a chimney on the roof
+for (const x of [-1.8, -0.6]) {
+  rbox(0.6, 0.35, 0.6, C.steel, { r: 0.06, x, y: 2.3, z: -0.2, parent: kitchen, m: mat(C.steel, { metalness: 0.5, roughness: 0.35 }) });
+}
+rbox(0.45, 1.0, 0.45, C.wall, { r: 0.06, x: 1.9, y: 2.3, z: -0.2, parent: kitchen });
+rbox(0.58, 0.1, 0.58, C.roof, { r: 0.04, x: 1.9, y: 3.3, z: -0.2, parent: kitchen });
+// small high windows on the visible end (+x)
+for (const z of [-0.45, 0.35]) rbox(0.06, 0.4, 0.5, 0, { r: 0.04, x: 3.41, y: 1.4, z, parent: kitchen, m: mat(C.glass, { emissive: 0xffd9a0, emissiveIntensity: 0.25 }) });
+kitchen.position.set(3.1, GY, -5.95); // front overlaps the cafe's back wall so the two read as one building
+piece(kitchen, 0.24);
+const CHIMNEY = new THREE.Vector3(3.1 + 1.9, GY + 3.5, -6.15);
+
+// --- Cafe (in front of the kitchen), entrance on its left (-x) end
+const CAFE = { x: 3.1, z: -3.5, w: 6.8, d: 3.0, h: 2.6 };
+const cafe = new THREE.Group();
+rbox(CAFE.w, CAFE.h, CAFE.d, C.wall, { r: 0.12, parent: cafe });
+rbox(CAFE.w + 0.3, 0.22, CAFE.d + 0.3, C.roof, { r: 0.08, y: CAFE.h, parent: cafe });
+rbox(CAFE.w - 0.7, 0.35, CAFE.d - 0.7, C.roof, { r: 0.08, y: CAFE.h + 0.22, parent: cafe });
+const winM = mat(C.glass, { emissive: 0xffd9a0, emissiveIntensity: 0.25, roughness: 0.3 });
+// windows along the front (+z) face with a gold-striped awning
+for (let i = 0; i < 5; i++) {
+  const x0 = -2.6 + i * 1.3;
+  rbox(0.8, 1.2, 0.06, 0, { r: 0.06, x: x0, y: 0.5, z: CAFE.d / 2 + 0.02, parent: cafe, m: winM });
+  rbox(0.92, 0.08, 0.1, C.gold, { r: 0.03, x: x0, y: 1.72, z: CAFE.d / 2 + 0.03, parent: cafe });
+}
+function awning(w, depth, parent, pos, ry) {
+  const a = new THREE.Group();
+  a.position.copy(pos);
+  a.rotation.y = ry;
+  const tilt = new THREE.Group();
+  tilt.rotation.x = 0.38;
+  a.add(tilt);
+  const n = Math.max(3, Math.floor(w / 0.42));
+  for (let i = 0; i < n; i++) rbox(w / n, 0.06, depth, i % 2 ? C.cream : C.gold, { r: 0.02, x: -w / 2 + (i + 0.5) * (w / n), z: depth / 2 - 0.05, parent: tilt });
+  parent.add(a);
+  return a;
+}
+awning(CAFE.w, 0.9, cafe, new THREE.Vector3(0, CAFE.h - 0.4, CAFE.d / 2), 0);
+// windows on the right (+x) end
+for (const z of [-0.6, 0.6]) rbox(0.06, 1.1, 0.8, 0, { r: 0.06, x: CAFE.w / 2 + 0.02, y: 0.55, z, parent: cafe, m: winM });
+// ENTRANCE on the left (-x) end: double door, gold frame, small awning, steps, potted plants
+const door = new THREE.Group();
+door.position.set(-CAFE.w / 2, 0, 0);
+cafe.add(door);
+rbox(0.1, 1.9, 1.3, C.gold, { r: 0.04, x: -0.02, parent: door });
+rbox(0.12, 1.75, 0.56, C.ink, { r: 0.04, x: -0.05, z: -0.29, parent: door, m: mat(C.ink, { emissive: 0xffb860, emissiveIntensity: 0.12 }) });
+rbox(0.12, 1.75, 0.56, C.ink, { r: 0.04, x: -0.05, z: 0.29, parent: door, m: mat(C.ink, { emissive: 0xffb860, emissiveIntensity: 0.12 }) });
+awning(1.8, 0.8, door, new THREE.Vector3(-0.05, 2.15, 0), -Math.PI / 2);
+rbox(0.7, 0.12, 1.8, C.tile, { r: 0.04, x: -0.4, y: -0.12, parent: door });
+rbox(0.4, 0.06, 1.6, C.tile, { r: 0.03, x: -0.85, y: -0.16, parent: door });
+for (const z of [-1.05, 1.05]) {
+  cyl(0.2, 0.15, 0.4, C.cream, { x: -0.35, z, parent: door, seg: 14 });
+  ball(0.3, C.fern, { x: -0.35, y: 0.62, z, parent: door, seg: 12 });
+}
+// chalkboard by the entrance
+const board = new THREE.Group();
+rbox(0.08, 1.0, 0.7, C.ink, { r: 0.05, y: 0.12, parent: board });
+rbox(0.12, 0.08, 0.78, C.wood, { r: 0.03, y: 1.1, parent: board });
+[0.8, 0.6, 0.4].forEach((y, i) => rbox(0.02, 0.04, 0.5 - i * 0.08, C.cream, { r: 0.01, x: -0.05, y, parent: board }));
+board.position.set(-CAFE.w / 2 - 1.1, 0, -1.3);
+board.rotation.y = 0.3;
+cafe.add(board);
+cafe.position.set(CAFE.x, GY, CAFE.z);
+piece(cafe, 0.24);
+const ENTRANCE = new THREE.Vector3(CAFE.x - CAFE.w / 2 - 0.9, GY, CAFE.z);
+
+// --- Umbrella sit-out (left side), on a tiled patio
+const patio = new THREE.Group();
+rbox(6.0, 0.06, 7.0, C.tile, { r: 0.12, parent: patio });
+patio.position.set(-4.1, GY, -3.3);
+piece(patio, 0.1);
+// grass path between the two columns of umbrellas, with stepping stones, leading down to the lawn
+const grassPath = new THREE.Group();
+rbox(0.95, 0.08, 6.9, C.lawn, { r: 0.12, parent: grassPath });
+for (let i = 0; i < 9; i++) {
+  const st = cyl(0.2, 0.2, 0.04, C.path, { x: (i % 2 ? 0.08 : -0.08), y: 0.06, z: -3.1 + i * 0.78, parent: grassPath, seg: 14 });
+  st.castShadow = false;
+}
+grassPath.position.set(-3.95, GY + 0.02, -2.95);
+piece(grassPath, 0.14);
+const UMBRELLAS = [[-5.4, -5.2], [-2.7, -5.6], [-5.2, -1.9], [-2.6, -2.3]];
+const umbrellaTables = UMBRELLAS.map(([x, z], i) => {
+  const g = new THREE.Group();
+  cyl(0.06, 0.12, 0.6, C.ink, { parent: g, seg: 12 });
+  cyl(0.5, 0.5, 0.06, C.cream, { y: 0.6, parent: g, seg: 28 });
+  cyl(0.03, 0.03, 1.5, C.wood, { y: 0.66, parent: g, seg: 8 });
+  const um = new THREE.Mesh(new THREE.ConeGeometry(1.15, 0.5, 8, 1, true), mat(i % 2 ? C.cream : C.goldLight, { side: THREE.DoubleSide }));
+  um.position.y = 2.25; um.castShadow = true;
+  g.add(um);
+  // scalloped gold trim
+  for (let k = 0; k < 8; k++) {
+    const a = (k / 8) * TAU + Math.PI / 8;
+    ball(0.05, C.gold, { x: Math.cos(a) * 1.08, y: 2.0, z: Math.sin(a) * 1.08, parent: g, seg: 8 });
+  }
+  ball(0.06, C.gold, { y: 2.55, parent: g, seg: 8 });
+  const guests = [];
+  [0.5, 0.5 + Math.PI, 0.5 + Math.PI / 2].slice(0, 2 + (i % 2)).forEach((a, k) => {
+    const cx = Math.cos(a) * 0.78, cz = Math.sin(a) * 0.78;
+    rbox(0.34, 0.38, 0.34, C.gold, { r: 0.05, x: cx, z: cz, parent: g });
+    const p = person([C.ink, C.green, C.pink, C.roof, C.goldLight, C.greenDark][(i + k) % 6], { seated: true });
+    p.position.set(cx, 0, cz);
+    g.add(p);
+    guests.push(p);
+  });
+  const cup = cyl(0.06, 0.05, 0.1, C.white, { y: 0.66, x: 0.15, z: -0.12, parent: g, seg: 12 });
+  g.userData = { guests, cup };
+  g.position.set(x, GY, z);
+  return piece(g, 0.42 + i * 0.05);
+});
+
+// --- Lawn (front-left) with a strolling path, trees and flower beds
+const lawn = new THREE.Group();
+rbox(4.1, 0.08, 5.8, C.lawn, { r: 0.25, parent: lawn });
+lawn.position.set(-4.95, GY, 4.1);
+piece(lawn, 0.12);
+const walkPath = roundedRectPath(-4.95, 4.1, 1.45, 2.2, 0.8);
+const pathG = new THREE.Group();
+for (let i = 0; i < 26; i++) {
+  const p = walkPath.getPointAt(i / 26);
+  const st = cyl(0.26, 0.26, 0.04, C.path, { x: p.x, y: GY + 0.08, z: p.z, parent: pathG, seg: 16 });
+  st.castShadow = false;
+}
+piece(pathG, 0.16);
+
+const blooms = [];
+function flowerBed(x, z, w, d, delay) {
+  const g = new THREE.Group();
+  rbox(w, 0.3, d, C.cream, { r: 0.08, parent: g });
+  rbox(w - 0.16, 0.06, d - 0.16, 0x6b5442, { r: 0.04, y: 0.28, parent: g });
+  const n = Math.round(w * d * 5);
+  for (let i = 0; i < n; i++) {
+    const fl = new THREE.Group();
+    fl.position.set((rand() - 0.5) * (w - 0.3), 0.34, (rand() - 0.5) * (d - 0.3));
+    cyl(0.015, 0.015, 0.22, C.green, { parent: fl, seg: 5 });
+    const head = ball(0.08, [C.pink, C.white, C.goldLight, C.pink][i % 4], { y: 0.25, parent: fl, seg: 10 });
+    fl.userData = { head, phase: rand() };
+    g.add(fl);
+    blooms.push(fl);
+  }
+  g.position.set(x, GY, z);
+  return piece(g, delay);
+}
+flowerBed(-4.95, 4.1, 0.9, 1.8, 0.6);
+flowerBed(-6.6, 1.6, 1.0, 1.4, 0.62);
+flowerBed(-3.5, 6.6, 0.9, 0.8, 0.64);
+
+function tree(x, z, s, delay, dark) {
+  const g = new THREE.Group();
+  cyl(0.08 * s, 0.11 * s, 0.9 * s, C.trunk, { parent: g, seg: 10 });
+  ball(0.6 * s, dark ? C.greenDark : C.green, { y: 1.2 * s, parent: g });
+  ball(0.42 * s, C.fern, { x: 0.3 * s, y: 1.5 * s, z: 0.15 * s, parent: g });
+  g.position.set(x, GY, z);
+  return piece(g, delay);
+}
+tree(-6.6, 6.5, 1.15, 0.58, true);
+tree(-5.0, 6.75, 0.8, 0.6, false);
+tree(-7.0, -7.0, 1.0, 0.55, false);
+tree(-0.9, -7.0, 0.85, 0.57, true);
+tree(7.0, -7.0, 1.05, 0.56, true);
+
+// --- Bush bar (front-right, stretched along the front): open thatched hut with a long bar, stools and benches
+const BW = 9.2, BD = 5.0; // footprint
+const BUSH = new THREE.Vector3(2.3, GY, 3.6);
+const bush = new THREE.Group();
+rbox(BW, 0.12, BD, C.woodDark, { r: 0.08, parent: bush }); // timber deck
+for (const x of [-BW / 2 + 0.4, 0, BW / 2 - 0.4]) for (const z of [-2.1, 2.1]) cyl(0.11, 0.13, 2.3, C.woodDark, { x, z, y: 0.12, parent: bush, seg: 10 });
+// thatch: stacked four-sided cones stretched along x into a long hipped roof, roughened so the
+// eave is ragged, with a straw fringe hanging from every tier
+const SX = BW / 5.0;
+// position-based noise, so vertices duplicated along the cone seam move together (no cracks)
+const noise = (x, y, z) => { const v = Math.sin(x * 12.99 + y * 78.23 + z * 37.72) * 43758.55; return v - Math.floor(v) - 0.5; };
+const LAYERS = [[3.9, 0.9, 2.4, C.thatch], [3.0, 0.7, 2.85, C.thatchDark], [1.8, 0.5, 3.2, C.thatch]];
+LAYERS.forEach(([r, h, y, c]) => {
+  const geo = new THREE.ConeGeometry(r, h, 4, 1); // keep 1 height segment: more flips the faces
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const px = pos.getX(i), py = pos.getY(i), pz = pos.getZ(i);
+    if (py > h / 2 - 1e-4) continue; // keep the apex
+    const n = noise(px, py, pz);
+    pos.setXYZ(i, px * (1 + n * 0.05), py + noise(pz, px, py) * 0.08, pz * (1 + n * 0.05)); // ragged eave
+  }
+  geo.computeVertexNormals();
+  const cone = new THREE.Mesh(geo, mat(c, { roughness: 0.95, flatShading: true }));
+  cone.rotation.y = Math.PI / 4;
+  cone.position.y = y + h / 2;
+  cone.castShadow = cone.receiveShadow = true;
+  const holder = new THREE.Group(); // scale in the parent so the rotated pyramid stretches into a hip roof
+  holder.add(cone);
+  holder.scale.set(SX, 1, 1);
+  bush.add(holder);
+});
+// ragged straw fringe: thin downward cones along the eaves of every tier
+{
+  const strands = [];
+  for (const [r, , y] of LAYERS) {
+    const a = r / Math.SQRT2; // half-width of the square eave before stretching
+    const edges = [
+      [[-a, a], [a, a]], [[a, a], [a, -a]], [[a, -a], [-a, -a]], [[-a, -a], [-a, a]],
+    ];
+    for (const [[x0, z0], [x1, z1]] of edges) {
+      const len = Math.hypot((x1 - x0) * SX, z1 - z0);
+      const n = Math.round(len / 0.11);
+      for (let i = 0; i < n; i++) {
+        const f = (i + 0.5) / n;
+        const x = (x0 + (x1 - x0) * f) * SX, z = z0 + (z1 - z0) * f;
+        strands.push({ x, z, y, k: rand() });
+      }
+    }
+  }
+  const strandGeo = new THREE.ConeGeometry(0.075, 1, 4);
+  strandGeo.rotateX(Math.PI); // flip so the tip points down...
+  strandGeo.translate(0, -0.5, 0); // ...then hang it so the base sits at y=0
+  const fringe = new THREE.InstancedMesh(strandGeo, mat(0xffffff, { roughness: 0.95, flatShading: true }), strands.length);
+  const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(), at = new THREE.Vector3();
+  const tones = [C.thatch, C.thatchDark, 0xd9b77a, 0xb8924f].map((c) => new THREE.Color(c));
+  strands.forEach((s, i) => {
+    const out = Math.atan2(s.x / SX, s.z); // lean outward from the roof centre
+    e.set(Math.cos(out) * 0.25, 0, -Math.sin(out) * 0.25);
+    q.setFromEuler(e);
+    const L = 0.22 + s.k * 0.32;
+    sc.set(1, L, 1);
+    at.set(s.x * 1.01, s.y + 0.04, s.z * 1.01);
+    m4.compose(at, q, sc);
+    fringe.setMatrixAt(i, m4);
+    fringe.setColorAt(i, tones[i % tones.length]);
+  });
+  fringe.castShadow = true;
+  bush.add(fringe);
+}
+// long bar counter along the back edge, with stools and bottles
+rbox(6.4, 1.0, 0.6, C.wood, { r: 0.06, x: 0.6, z: -1.6, y: 0.12, parent: bush });
+rbox(6.6, 0.08, 0.8, C.woodDark, { r: 0.03, x: 0.6, z: -1.6, y: 1.12, parent: bush });
+const bottles = [];
+for (let i = 0; i < 12; i++) bottles.push(cyl(0.05, 0.06, 0.3, 0, { x: -2.3 + i * 0.52, y: 1.2, z: -1.75, parent: bush, seg: 8, m: glow([C.gold, 0x4c8a3a, 0xc8553d][i % 3], 0.25) }));
+const barStools = [];
+for (let i = 0; i < 7; i++) {
+  cyl(0.15, 0.13, 0.62, C.gold, { x: -2.1 + i * 0.9, z: -0.95, y: 0.12, parent: bush, seg: 14 });
+  if (i % 2 === 0) {
+    const p = person([C.ink, C.green, C.pink, C.roof][i / 2], { seated: true });
+    p.position.set(-2.1 + i * 0.9, 0.3, -0.95);
+    p.rotation.y = Math.PI;
+    bush.add(p);
+    barStools.push(p);
+  }
+}
+// benches and low tables where guests eat
+const viewers = [...barStools];
+function bench(x, z, ry, n) {
+  const b = new THREE.Group();
+  rbox(1.8, 0.4, 0.45, C.wood, { r: 0.05, y: 0.12, parent: b });
+  rbox(1.8, 0.4, 0.1, C.woodDark, { r: 0.03, y: 0.5, z: -0.2, parent: b });
+  for (let k = 0; k < n; k++) {
+    const p = person([C.ink, C.pink, C.green, C.goldLight, C.roof][(viewers.length + k) % 5], { seated: true });
+    p.position.set(-0.55 + k * 0.55, 0.02, 0.02);
+    b.add(p);
+    viewers.push(p);
+  }
+  b.position.set(x, 0, z);
+  b.rotation.y = ry;
+  bush.add(b);
+}
+const plates = [];
+for (const x of [-2.8, 0.2, 3.2]) {
+  bench(x, 1.75, Math.PI, 3);
+  bench(x, 0.05, 0, 2);
+  rbox(1.5, 0.5, 0.7, C.woodDark, { r: 0.05, x, z: 0.9, y: 0.12, parent: bush });
+  for (const dx of [-0.4, 0.35]) {
+    cyl(0.13, 0.11, 0.03, C.white, { x: x + dx, z: 0.9, y: 0.63, parent: bush, seg: 16 });
+    plates.push(ball(0.07, 0xf2b84b, { x: x + dx, y: 0.7, z: 0.9, parent: bush, seg: 10 }));
+  }
+}
+// lanterns hanging from the thatch
+const lanterns = [];
+for (const [x, z] of [[-3.0, -0.4], [-1.0, 1.2], [1.2, -0.4], [3.2, 1.2], [4.0, -0.6]]) {
+  lanterns.push(ball(0.1, 0, { x, y: 2.1, z, parent: bush, seg: 10, m: glow(0xffd28a, 0.9).clone() }));
+}
+bush.position.copy(BUSH);
+piece(bush, 0.32);
+
+
+// --- Hedges along the front edges, lanterns
+const hedgeG = new THREE.Group();
+rbox(0.6, 0.7, 6.0, C.hedge, { r: 0.25, x: 7.4, z: -1.8, parent: hedgeG });
+rbox(0.6, 0.7, 2.4, C.hedge, { r: 0.25, x: 7.4, z: 5.6, parent: hedgeG });
+rbox(7.6, 0.7, 0.6, C.hedge, { r: 0.25, x: -3.6, z: 7.4, parent: hedgeG });
+rbox(2.6, 0.7, 0.6, C.hedge, { r: 0.25, x: 5.8, z: 7.4, parent: hedgeG });
+hedgeG.position.y = GY;
+piece(hedgeG, 0.55);
+for (const [x, z] of [[-0.8, -0.6], [-7.0, -0.2], [-2.6, 6.8], [-2.6, 1.3]]) {
+  const g = new THREE.Group();
+  rbox(0.07, 1.5, 0.07, C.ink, { r: 0.02, parent: g });
+  rbox(0.22, 0.28, 0.22, 0, { r: 0.05, y: 1.5, parent: g, m: glow(C.glass, 0.7) });
+  rbox(0.28, 0.06, 0.28, C.gold, { r: 0.02, y: 1.78, parent: g });
+  g.position.set(x, GY, z);
+  piece(g, 0.68);
+}
+
+// --- Strolling guests on the lawn path (one lap per loop)
+const strollers = [C.ink, C.gold, C.pink].map((c, i) => {
+  const g = person(c);
+  g.userData = { offset: i / 3 + (i % 2) * 0.04, dir: i % 2 ? -1 : 1 };
+  return piece(g, 0.75 + i * 0.03);
+});
+
+// --- Kitchen steam
+const steamMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, transparent: true, opacity: 0.4, depthWrite: false });
+const puffs = [];
+for (let i = 0; i < 6; i++) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(0.22, 12, 8), steamMat.clone());
+  m.userData.phase = i / 6;
+  scene.add(m);
+  puffs.push(m);
+}
+
+// --- Waiters: out of the cafe entrance to a table and back (one round trip per loop)
+const waiters = [
+  { to: [UMBRELLAS[0][0] + 0.9, UMBRELLAS[0][1] + 0.5], phase: 0.0, pulse: ["u", 0] },
+  { to: [UMBRELLAS[3][0] - 0.2, UMBRELLAS[3][1] + 0.9], phase: 0.33, pulse: ["u", 3] },
+  { to: [BUSH.x + 0.2, BUSH.z - 2.4], phase: 0.66, pulse: ["b", 0] },
+].map((w, i) => {
+  const g = person(C.ink);
+  rbox(0.24, 0.16, 0.05, C.cream, { r: 0.02, y: 0.18, z: 0.1, parent: g }); // apron
+  const tray = new THREE.Group();
+  tray.position.set(0.2, 0.5, 0);
+  g.add(tray);
+  cyl(0.17, 0.17, 0.02, C.gold, { parent: tray, seg: 20 });
+  cyl(0.12, 0.1, 0.03, C.white, { y: 0.02, parent: tray, seg: 20 });
+  ball(0.07, i === 1 ? 0x6b3f22 : 0xf2b84b, { y: 0.07, parent: tray, seg: 10 });
+  Object.assign(g.userData, w, { tray, dest: new THREE.Vector3(w.to[0], GY, w.to[1]), last: 0 });
+  g.position.copy(ENTRANCE);
+  return piece(g, 0.8 + i * 0.03);
+});
+
+const umbrellaPulse = new Array(UMBRELLAS.length).fill(0);
+let bushPulse = 0;
+
+// ---------- animation ----------
+const start = performance.now();
+const tmp = new THREE.Vector3();
+
+function frame(now) {
+  const elapsed = STILL !== null ? STILL + 1.2 : REDUCED ? 3 : (now - start) / 1000;
+  const build = elapsed;
+  const t = Math.max(0, elapsed - 1.2);
+  const u = (t % LOOP) / LOOP;
+
+  for (const p of pieces) {
+    const k = clamp01((build - p.userData.delay) / 0.55);
+    const s = k <= 0 ? 0.0001 : easeOutBack(k);
+    p.scale.copy(p.userData.baseScale).multiplyScalar(Math.max(0.0001, s));
+    p.position.y = p.userData.baseY + (1 - smooth(k)) * -1.2;
+    p.visible = k > 0;
+  }
+
+  // camera: slow eased orbit + gentle push-in, both periodic so the loop has no jump
+  const theta = VIEW + 0.25 * Math.sin(u * TAU);
+  const push = 0.5 - 0.5 * Math.cos(u * TAU);
+  const dist = fitDist() * (1 - 0.1 * push);
+  const phi = 0.6;
+  camera.position.set(
+    target.x + Math.sin(theta) * Math.cos(phi) * dist,
+    target.y + Math.sin(phi) * dist,
+    target.z + Math.cos(theta) * Math.cos(phi) * dist);
+  camera.lookAt(target);
+
+  const live = build > 1;
+  puffs.forEach((p) => {
+    const f = (u * 2 + p.userData.phase) % 1;
+    p.visible = live;
+    p.position.set(CHIMNEY.x + Math.sin(f * 4 + p.userData.phase * 7) * 0.15 + f * 0.5, CHIMNEY.y + f * 2.4, CHIMNEY.z - f * 0.3);
+    p.scale.setScalar(0.5 + f * 1.4);
+    p.material.opacity = 0.4 * Math.sin(f * Math.PI);
+  });
+
+  // bush bar guests: a little lift when their plate lands (relative to each seat height)
+  viewers.forEach((v) => {
+    if (v.userData.seatY === undefined) v.userData.seatY = v.position.y;
+    v.position.y = v.userData.seatY + Math.sin(bushPulse * Math.PI) * 0.05;
+  });
+  lanterns.forEach((l, i) => (l.material.emissiveIntensity = 0.8 + 0.3 * Math.sin((u * 3 + i / 3) * TAU)));
+  bottles.forEach((b, i) => (b.material.emissiveIntensity = 0.2 + 0.15 * Math.sin((u * 2 + i / 7) * TAU)));
+  plates.forEach((p, i) => (p.scale.y = 1 + Math.sin(bushPulse * Math.PI) * 0.3 * (i === 0 ? 1 : 0.5)));
+
+  if (t > 0) {
+    for (const g of strollers) {
+      const s = ((g.userData.dir > 0 ? u : 1 - u) + g.userData.offset) % 1;
+      const p = walkPath.getPointAt(s), tan = walkPath.getTangentAt(s).multiplyScalar(g.userData.dir);
+      g.position.set(p.x, GY + 0.08 + Math.abs(Math.sin(u * TAU * 12 + g.userData.offset * 9)) * 0.04, p.z);
+      g.rotation.y = Math.atan2(-tan.z, tan.x) + Math.PI / 2;
+    }
+    // waiters: out (0..0.4), pause at the table (0.4..0.5), back (0.5..0.9), pause at the door
+    for (const w of waiters) {
+      const d = w.userData;
+      const f = (u + d.phase) % 1;
+      let k, outbound;
+      if (f < 0.4) { k = smooth(f / 0.4); outbound = true; }
+      else if (f < 0.5) { k = 1; outbound = true; }
+      else if (f < 0.9) { k = 1 - smooth((f - 0.5) / 0.4); outbound = false; }
+      else { k = 0; outbound = false; }
+      w.position.lerpVectors(ENTRANCE, d.dest, k);
+      w.position.y = GY + (k > 0 && k < 1 ? Math.abs(Math.sin(f * TAU * 6)) * 0.04 : 0);
+      tmp.subVectors(d.dest, ENTRANCE);
+      w.rotation.y = Math.atan2(outbound ? tmp.x : -tmp.x, outbound ? tmp.z : -tmp.z);
+      const served = f >= 0.42;
+      d.tray.visible = !served || f >= 0.9;
+      if (served && !d.last) {
+        if (d.pulse[0] === "u") umbrellaPulse[d.pulse[1]] = 1; else bushPulse = 1;
+      }
+      d.last = served && f < 0.9 ? 1 : 0;
+    }
+  }
+
+  // umbrella guests lean in when served
+  umbrellaTables.forEach((g, i) => {
+    umbrellaPulse[i] = Math.max(0, umbrellaPulse[i] - 0.03);
+    const lift = Math.sin(umbrellaPulse[i] * Math.PI) * 0.08;
+    g.userData.guests.forEach((p) => (p.position.y = lift));
+    g.userData.cup.scale.y = 1 + lift * 5;
+  });
+  bushPulse = Math.max(0, bushPulse - 0.03);
+  blooms.forEach((fl) => {
+    const k = 0.5 + 0.5 * Math.sin((u * 2 + fl.userData.phase) * TAU);
+    fl.userData.head.scale.setScalar(0.55 + 0.75 * smooth(k));
+  });
+
+  composer.render();
+  if (onScreen) requestAnimationFrame(frame);
+  else paused = true;
+}
+
+let onScreen = true, paused = false;
+new IntersectionObserver(([e]) => {
+  onScreen = e.isIntersecting;
+  if (onScreen && paused) { paused = false; requestAnimationFrame(frame); }
+}).observe(document.documentElement);
+requestAnimationFrame(frame);
+
+addEventListener("resize", () => {
+  frameView();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
