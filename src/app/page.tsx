@@ -7,6 +7,7 @@ import { MenuGroup, MenuMark, MARK_LABELS } from "@/components/MenuGroup";
 import { DrinkCard } from "@/components/DrinkCard";
 import { Photo } from "@/components/Photo";
 import { Logo } from "@/components/Logo";
+import { Venue3D } from "@/components/Venue3D";
 import { foodGroups, drinkGroups, type MenuMark as MenuMarkKind } from "@/data/menu";
 import { contact, hours, hoursSummary } from "@/data/site";
 
@@ -182,6 +183,20 @@ export default function HomePage() {
               </figure>
             ))}
           </div>
+        </section>
+
+        {/* ===================== The space (3D) ===================== */}
+        <section id="space" className="section section--bordered space" aria-labelledby="space-title">
+          <div className="section-head" data-reveal>
+            <div>
+              <p className="kicker">The space</p>
+              <h2 id="space-title">Find your spot</h2>
+            </div>
+            <p className="section-subline">
+              The cafe, the umbrellas on the patio, the lawn or the bush bar.
+            </p>
+          </div>
+          <Venue3D />
         </section>
 
         {/* ===================== Visit (dark band) ===================== */}
