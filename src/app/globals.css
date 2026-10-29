@@ -41,6 +41,9 @@
 
   /* Motion — strong ease-out for arrivals */
   --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-fast: 140ms; /* hovers, colour shifts */
+  --dur-base: 200ms; /* presses, menus, small moves */
 
   /* --font-inter is injected by next/font/google in src/app/layout.tsx */
   --font: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',

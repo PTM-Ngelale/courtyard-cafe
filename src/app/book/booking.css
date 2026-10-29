@@ -1,0 +1,387 @@
+.booking-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 48px 20px 96px;
+}
+
+.booking-page h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.booking-page > p {
+  color: var(--ink-2);
+  margin-bottom: 32px;
+}
+
+.booking-form {
+  background: var(--surface);
+  border: 1px solid var(--divider-soft);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 28px;
+}
+
+.booking-field {
+  margin-bottom: 18px;
+}
+
+.booking-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+.booking-field input,
+.booking-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--cream-100);
+  color: var(--ink);
+  font: inherit;
+}
+
+.booking-field input:focus,
+.booking-field select:focus {
+  outline: 2px solid var(--gold-mid);
+  outline-offset: 1px;
+}
+
+.booking-field select:disabled {
+  background: var(--band);
+  color: var(--ink-4);
+}
+
+.booking-house-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.booking-house-row select {
+  flex: 1;
+}
+
+.booking-status {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  /* ✓ / ✗ swap: comes into focus rather than popping, so it isn't missed */
+  animation: booking-status-in var(--dur-base) var(--ease-out) backwards;
+}
+
+@keyframes booking-status-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+    filter: blur(3px);
+  }
+}
+
+.booking-status--valid {
+  color: #2f7a4f;
+}
+
+.booking-status--invalid {
+  color: #b3392f;
+}
+
+.booking-field select.is-valid {
+  border-color: #2f7a4f;
+}
+
+.booking-field select.is-invalid {
+  border-color: #b3392f;
+}
+
+.booking-hint {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 6px;
+}
+
+.booking-error {
+  background: #fbeceA;
+  border: 1px solid #e3b6ae;
+  color: #8a3325;
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  animation: booking-error-in var(--dur-base) var(--ease-out) backwards;
+}
+
+@keyframes booking-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.booking-submit {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gold-deep);
+  color: var(--cream-100);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.booking-submit:hover:not(:disabled) {
+  background: var(--gold);
+}
+
+.booking-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.booking-submit:disabled {
+  background: var(--ink-4);
+  cursor: not-allowed;
+}
+
+.booking-footnote {
+  font-size: 12px;
+  color: var(--ink-3);
+  text-align: center;
+  margin-top: 18px;
+}
+
+.booking-success {
+  background: #eaf5ee;
+  border: 1px solid #b9dcc4;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  text-align: center;
+}
+
+/* The one moment worth savouring: the card settles in, then the heading and
+   the next-step line follow a beat apart so the confirmation lands. */
+.booking-success,
+.booking-success > * {
+  animation: booking-success-in 480ms var(--reveal-ease) backwards;
+}
+
+.booking-success > * {
+  animation-duration: 420ms;
+}
+
+.booking-success h2 {
+  color: #2f7a4f;
+  margin-bottom: 8px;
+  animation-delay: 120ms;
+}
+
+.booking-success p {
+  color: var(--ink-2);
+  animation-delay: 220ms;
+}
+
+@keyframes booking-success-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+}
+
+/* ---- Ordering: menu picker, cart bar, receipt ---- */
+
+.order-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 16px;
+  scrollbar-width: none;
+}
+
+.order-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.order-tab {
+  flex: none;
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.order-tab.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream-100);
+}
+
+.order-items {
+  list-style: none;
+  margin: 0 0 96px;
+  padding: 0;
+  border-top: 1px solid var(--divider-soft);
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--divider-soft);
+}
+
+.order-item__text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.order-item__name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.order-item__desc {
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.4;
+}
+
+.order-item__price {
+  font-size: 14px;
+  color: var(--gold-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.order-add,
+.order-stepper button {
+  flex: none;
+  min-width: 44px;
+  min-height: 40px;
+  border: 1px solid var(--gold-deep);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--gold-deep);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.order-add {
+  padding: 0 16px;
+}
+
+.order-add:active,
+.order-stepper button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.order-stepper {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-stepper span {
+  min-width: 20px;
+  text-align: center;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Pinned to the bottom of the screen so the total is always in reach. */
+.order-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px max(20px, calc((100vw - 480px) / 2)) calc(12px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--divider);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-bar .booking-submit {
+  width: auto;
+  padding: 12px 24px;
+}
+
+.order-closed {
+  text-align: center;
+}
+
+.order-back {
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 16px;
+  color: var(--gold-deep);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.order-receipt {
+  margin: 20px 0;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--band);
+  font-variant-numeric: tabular-nums;
+}
+
+.booking-form .order-receipt {
+  margin-top: 0;
+}
+
+.order-receipt ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-receipt li,
+.order-receipt__total {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  padding: 4px 0;
+}
+
+.order-receipt__total {
+  margin: 8px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--divider);
+  font-weight: 700;
+  font-size: 16px;
+}
