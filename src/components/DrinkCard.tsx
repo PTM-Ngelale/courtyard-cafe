@@ -3,7 +3,7 @@ import type { MenuGroup as MenuGroupData } from '@/data/menu';
 /** One drinks category as a card: heading, then name · dotted leader · price. */
 export function DrinkCard({ group }: { group: MenuGroupData }) {
   return (
-    <div className="drink-card">
+    <div className="drink-card" data-reveal>
       <h4>{group.title}</h4>
       <dl className="drink-card__list">
         {group.items.map((item, i) => (

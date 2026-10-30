@@ -138,8 +138,8 @@ export default function HomePage() {
         </section>
 
         {/* ===================== Food menu ===================== */}
-        <section id="menu" className="section section--bordered" data-reveal>
-          <div className="section-head">
+        <section id="menu" className="section section--bordered">
+          <div className="section-head" data-reveal>
             <div>
               <p className="kicker">Kitchen</p>
               <h2>Food menu</h2>
@@ -147,7 +147,7 @@ export default function HomePage() {
             <p className="section-subline">{hoursSummary.kitchen}</p>
           </div>
           <MenuTabs sections={MENU_SECTIONS} />
-          <p className="menu-legend">
+          <p className="menu-legend" data-reveal>
             {(Object.keys(MARK_LABELS) as MenuMarkKind[]).map((mark) => (
               <span key={mark}>
                 <MenuMark mark={mark} />
@@ -158,8 +158,8 @@ export default function HomePage() {
         </section>
 
         {/* ===================== Drinks ===================== */}
-        <section id="drinks" className="section drinks" data-reveal>
-          <div className="section-head">
+        <section id="drinks" className="section drinks">
+          <div className="section-head" data-reveal>
             <div>
               <p className="kicker">Bar</p>
               <h2>Drinks</h2>
@@ -186,7 +186,10 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer me"
             >
-              {contact.instagramHandle} →
+              {contact.instagramHandle}{" "}
+              <span className="gallery__arrow" aria-hidden="true">
+                →
+              </span>
             </a>
           </div>
           <div className="gallery-grid" data-reveal-stagger>

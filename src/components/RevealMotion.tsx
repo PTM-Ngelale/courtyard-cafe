@@ -23,14 +23,26 @@ export function RevealMotion() {
 
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            io.unobserve(entry.target);
-          }
-        }
+        // Elements that arrive in the same frame (a row of menu groups or
+        // drink cards) step in reading order instead of landing as one slab.
+        const arriving = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => entry.target as HTMLElement)
+          .sort((a, b) => {
+            const ra = a.getBoundingClientRect();
+            const rb = b.getBoundingClientRect();
+            return ra.top - rb.top || ra.left - rb.left;
+          });
+
+        arriving.forEach((el, i) => {
+          if (i > 0) el.style.transitionDelay = `${Math.min(i, 4) * 70}ms`;
+          el.classList.add("is-visible");
+          io.unobserve(el);
+        });
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+      // threshold 0: trigger as soon as the top edge clears the bottom margin,
+      // so tall elements never sit invisible while the reader scrolls past.
+      { rootMargin: "0px 0px -8% 0px", threshold: 0 },
     );
 
     // Anything already on screen (the hero) reveals right away; the rest waits

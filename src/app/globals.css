@@ -39,8 +39,12 @@
   /* Elevation — one step only */
   --shadow-sm: 0 0 0 1px rgba(28, 35, 32, 0.1);
 
-  /* Motion — strong ease-out for arrivals */
+  /* Motion — strong ease-out for arrivals; tune the whole site from here */
   --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --dur-fast: 140ms; /* hovers, colour shifts */
+  --dur-base: 200ms; /* presses, menus, small moves */
 
   /* --font-inter is injected by next/font/google in src/app/layout.tsx */
   --font: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
@@ -107,7 +111,7 @@ p {
 a {
   color: var(--gold-deep);
   text-decoration: none;
-  transition: color 120ms ease;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 a:hover {
@@ -195,7 +199,15 @@ a:hover {
   line-height: 1.2;
   cursor: pointer;
   text-decoration: none;
-  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+  transition: background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+/* Press feedback: a small give under the finger, never from scale(0) */
+.btn:active {
+  transform: scale(0.97);
 }
 
 .btn--primary {
@@ -356,7 +368,7 @@ a:hover {
   height: 1.5px;
   width: 100%;
   background: var(--ink-2);
-  transition: transform 160ms ease, opacity 120ms ease;
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 .site-header__toggle[aria-expanded='true'] .site-header__toggle-bar:first-child {
@@ -384,10 +396,22 @@ a:hover {
     /* fully opaque so page content doesn't ghost through the open menu */
     background: var(--bg);
     border-bottom: 1px solid var(--divider);
+    /* Drops in from under the header; transitions (not keyframes) so a quick
+       double-tap on the toggle retargets instead of jumping. */
+    transform-origin: top center;
+    transition: opacity var(--dur-base) var(--ease-out),
+      transform var(--dur-base) var(--ease-out), visibility 0s;
   }
 
+  /* Closed: hidden from pointer, keyboard and screen readers via visibility.
+     The exit is quicker and shorter than the enter. */
   .site-header__nav:not(.is-open) {
-    display: none;
+    opacity: 0;
+    transform: translateY(-4px);
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 120ms var(--ease-in), transform 120ms var(--ease-in),
+      visibility 0s 120ms;
   }
 
   .site-header__nav a:not(.btn) {
@@ -847,6 +871,18 @@ a:hover {
   letter-spacing: 0.06em;
 }
 
+/* The arrow leans toward where the link goes */
+.gallery__arrow {
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .gallery__link:hover .gallery__arrow {
+    transform: translateX(3px);
+  }
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
@@ -957,8 +993,10 @@ a:hover {
    motion is allowed) so no-JS and reduced-motion both render final state.
    ========================================================================= */
 
-/* Block reveals (sections, hero photos): transform + opacity only — cheap to
-   composite even on the tall menu/drinks sections. */
+/* Block reveals (sections, menu groups, drink cards, hero photos): transform +
+   opacity only — cheap to composite. Menu groups and drink cards reveal one by
+   one as they arrive (RevealMotion staggers any that arrive together), so a
+   tall section never leaves a blank gap while it waits to trigger. */
 .reveal-ready [data-reveal],
 .reveal-ready [data-reveal-stagger] > * {
   opacity: 0;

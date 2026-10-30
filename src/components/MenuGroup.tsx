@@ -39,7 +39,7 @@ export function MenuMark({ mark }: { mark: MenuMarkKind }) {
 /** One food category: heading + fading rule, then name/description/price rows. */
 export function MenuGroup({ group }: { group: MenuGroupData }) {
   return (
-    <div className="menu-group">
+    <div className="menu-group" data-reveal>
       <div className="menu-group__head">
         <h3>{group.title}</h3>
         <span className="menu-group__rule" aria-hidden="true" />
