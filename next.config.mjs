@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // The site is fully static — export a plain HTML/CSS/JS bundle to `out/`.
-  output: 'export',
+  // Booking requires live API routes (Supabase), so the site now deploys as
+  // a full Next.js app on Vercel rather than a static export.
 
-  // Static export can't use the Next Image Optimization server. Photos are
-  // pre-compressed to responsive WebP by `scripts/optimize-images.mjs` and
-  // served from /public; the <Photo> component emits a plain <img srcset>.
+  // Photos are pre-compressed to responsive WebP by
+  // `scripts/optimize-images.mjs` and served from /public; the <Photo>
+  // component emits a plain <img srcset>, so Image Optimization stays off.
   images: { unoptimized: true },
 
   // Emit `about/index.html` rather than `about.html` — friendlier on most
