@@ -75,8 +75,8 @@ Everything runs in the browser; there is no app.
    asks Paystack whether the payment succeeded for the full amount and marks
    the order `confirmed`. Paystack also calls `/api/paystack/webhook`, so the
    order is confirmed even if the resident closes the tab.
-4. Paid orders appear on `/admin/orders` in real time. Staff move them through
-   preparing → ready → delivered. Unpaid checkouts never show there.
+4. Paid orders appear on `/admin/orders` in real time. Unpaid checkouts never
+   show there. See "Staff order board" below.
 
 Delivery rules (fee, 30-minute notice, same day, opening hours, last delivery
 30 minutes before closing) live in `src/lib/delivery.ts`. The delivery fee is
@@ -97,12 +97,41 @@ Delivery rules (fee, 30-minute notice, same day, opening hours, last delivery
 | `src/lib/supabase-server.ts` | Service-role client — server-only, never import from a Client Component |
 | `src/lib/supabase-browser.ts` | Anon-key client — used by the staff dashboard (auth + realtime) |
 
+### Staff order board (`/admin/orders`)
+
+Built for a tablet or phone in the kitchen:
+
+- Four stages: **New → Preparing → Ready to send → Done** (columns on a wide
+  screen, tabs on a phone). One big button moves an order on; a small one
+  steps it back if someone tapped too soon.
+- **Sound**: once staff tap "Turn on sound", the screen chimes when a paid
+  order arrives and again every 2 minutes while anything sits in New. The tab
+  title shows the count, e.g. "(2) New orders".
+- Each card shows the delivery time with a countdown (red when late),
+  address, Call and WhatsApp links, items, notes and the amount paid.
+- **Print** prints a kitchen/rider slip (sized for 80 mm receipt printers).
+- **Cancel** asks first and reminds staff that the customer has paid, giving
+  the Paystack reference to refund. Refunds are done in Paystack by hand.
+- Day picker for past days, search by name, phone, house or order number,
+  and the day's totals (orders, takings, still to deliver, running late).
+- If the live connection drops, the board says so and re-checks every
+  minute and whenever the screen wakes up.
+
+Code: `src/components/StaffDashboard.tsx` and `src/components/staff/*`.
+
+Only accounts in the `staff` table can see orders (`reef-court-staff.sql`).
+To add someone: create their login in Supabase **Authentication > Users**,
+then run
+`insert into staff (user_id, name) select id, 'Their name' from auth.users where email = 'them@example.com';`
+
 ### Setup
 
-1. Create a Supabase project, then run `reef-court-schema.sql` and then
-   `reef-court-seed.sql` in the SQL editor.
+1. Create a Supabase project, then run `reef-court-schema.sql`,
+   `reef-court-seed.sql` and `reef-court-staff.sql` in the SQL editor.
 2. In **Authentication > Users**, create one account per staff member who
-   needs `/admin/orders`.
+   needs `/admin/orders`, and add each to the `staff` table (see above).
+   Switch off **Allow new users to sign up** (Authentication > Sign In /
+   Providers) so nobody can make their own account.
 3. Set these environment variables (`.env.local` locally, Vercel project
    settings in production); see `.env.example`:
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
@@ -121,8 +150,9 @@ house numbers. RLS is enabled with **no** anon/authenticated policies on those
 two tables, so the public anon key (which is always visible in the browser
 bundle) cannot read them directly — only the service role key, used
 server-side in the API routes, can. `bookings` (customer name/phone/address
-per order) is similarly locked down: only signed-in staff (`authenticated`
-role) can select or update it. Don't add a broader `select`/`update` policy to
+per order) is similarly locked down: only accounts listed in `staff` can
+select it or change an order's status. Being signed in is not enough,
+because Supabase lets anyone create an account unless sign-ups are off. Don't add a broader `select`/`update` policy to
 any of these tables without re-checking what it exposes.
 
 ## Notes on the build
