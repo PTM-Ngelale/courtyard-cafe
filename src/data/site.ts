@@ -11,7 +11,7 @@ export const site = {
   shortName: "The Courtyard",
   tagline: "Where every moment blooms",
   description:
-    "A café and kitchen in Port Harcourt — long breakfasts, easy lunches, and something cold in a tall glass. Have a look at the full food and drinks menu.",
+    "A café and kitchen in Port Harcourt. Long breakfasts, easy lunches and something cold in a tall glass.",
   // Production domain — drives canonical links and Open Graph URLs.
   url: "https://www.thecourtyard.ng",
 };
@@ -39,8 +39,8 @@ export const hoursSummary = {
 };
 
 export const hours: { d: string; h: string }[] = [
-  { d: "Monday – Saturday", h: "8:30am – 10pm" },
-  { d: "Sunday", h: "11am – 10pm" },
+  { d: "Monday to Saturday", h: "8:30am to 10pm" },
+  { d: "Sunday", h: "11am to 10pm" },
 ];
 
 /**

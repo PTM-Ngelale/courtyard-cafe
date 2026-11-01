@@ -25,7 +25,7 @@ export default function MenuPage() {
           <p className="kicker">The Courtyard Cafe</p>
           <h1>Menu</h1>
           <p className="menu-intro__lede">
-            Everything we cook and pour. {hoursSummary.hero}.
+            Breakfast, lunch and the bar. {hoursSummary.hero}.
           </p>
           <nav className="menu-intro__jump" aria-label="Jump to">
             <a href="#food">Food</a>

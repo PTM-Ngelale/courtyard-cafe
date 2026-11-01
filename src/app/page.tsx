@@ -79,15 +79,15 @@ export default function HomePage() {
               A green corner of Port Harcourt, built for long meals
             </h2>
             <p className="prose">
-              We started out as a small kitchen — a few tables, far too many
-              ferns. It still feels like that. The food takes its time, the
-              coffee is made properly, and it stays quiet enough to hear the
-              person sitting across from you.
+              We started as a small kitchen with a few tables and far too many
+              ferns. It still feels that way. The food takes its time, the
+              coffee is made right, and it&apos;s quiet enough to hear the
+              person across from you.
             </p>
             <p className="prose">
-              Breakfast runs all morning. Lunch is mostly the comfort food we
-              grew up on — smoky jollof, asun fried rice, yamarita — alongside
-              the burgers and pasta people keep coming back for.
+              Breakfast is on all day. Lunch is mostly the food we grew up on,
+              like smoky jollof, asun fried rice and yamarita, plus the burgers
+              and pasta people keep coming back for.
             </p>
             <div className="about__tags">
               <Tag variant="accent">All-day breakfast</Tag>
