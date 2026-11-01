@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { MAX_QUANTITY, formatNaira, orderGroups, orderItemsById } from '@/lib/order-menu';
 import { DELIVERY_FEE_NAIRA, deliverySlots, type DeliverySlot } from '@/lib/delivery';
+import { CART_KEY } from './ClearCart';
 
 /**
  * Delivery order form for Reef Court Estate residents, all in the browser:
@@ -16,8 +17,6 @@ interface Street {
 }
 
 type Cart = Record<string, number>;
-
-const CART_KEY = 'courtyard-cart';
 
 function loadCart(): Cart {
   try {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Toggles `is-visible` on `[data-reveal]` / `[data-reveal-stagger]` elements as
@@ -12,8 +13,15 @@ import { useEffect } from "react";
  * script in layout.tsx adds before first paint (and skips under reduced
  * motion). If it isn't there, this component does nothing and every section
  * is already in its final state.
+ *
+ * It lives in the root layout, which stays mounted across client-side
+ * navigation, so it re-scans on every route change. Otherwise a page reached
+ * by a <Link> (e.g. "Back to The Courtyard" after paying) keeps its sections
+ * hidden until a full reload.
  */
 export function RevealMotion() {
+  const pathname = usePathname();
+
   useEffect(() => {
     if (!document.documentElement.classList.contains("reveal-ready")) return;
 
@@ -58,7 +66,7 @@ export function RevealMotion() {
     }
 
     return () => io.disconnect();
-  }, []);
+  }, [pathname]);
 
   return null;
 }
