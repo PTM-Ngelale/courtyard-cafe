@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- static export serves the pre-optimised WebP wordmark directly */
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { BackToTop } from "./BackToTop";
 import { contact, site } from "@/data/site";
 
 export function Footer() {
@@ -47,6 +48,7 @@ export function Footer() {
           decoding="async"
         />
       </a>
+      <BackToTop />
     </footer>
   );
 }
