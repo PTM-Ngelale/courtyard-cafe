@@ -43,7 +43,9 @@ export default function OrderCard({ order, now, fresh, busy, onMove, onPrint }: 
     >
       <header className="order__head">
         <div className="order__due">
-          <span className="order__time">{clock(order.preferred_time)}</span>
+          <span className="order__time">
+            <small>Due</small> {clock(order.preferred_time)}
+          </span>
           {open ? (
             <span className={`order__countdown order__countdown--${due.tone}`}>{due.text}</span>
           ) : (
@@ -144,6 +146,46 @@ export default function OrderCard({ order, now, fresh, busy, onMove, onPrint }: 
           </div>
         </div>
       )}
+    </article>
+  );
+}
+
+/** A finished order (delivered or cancelled): one compact row. */
+export function DoneRow({
+  order,
+  busy,
+  onMove,
+  onPrint,
+}: {
+  order: Order;
+  busy: boolean;
+  onMove: (order: Order, to: OrderStatus) => void;
+  onPrint: (order: Order) => void;
+}) {
+  const back = BACK[order.status];
+  return (
+    <article className={`done-row done-row--${order.status}`} aria-label={`Order ${order.id} for ${order.customer_name}`}>
+      <span className="done-row__time">{clock(order.preferred_time)}</span>
+      <span className="done-row__who">
+        <strong>
+          #{order.id} {order.customer_name}
+        </strong>
+        <span>
+          {order.house_number} {order.street_name}
+        </span>
+      </span>
+      <span className={`done-row__state order__state--${order.status}`}>{STATUS_LABEL[order.status]}</span>
+      <span className="done-row__total">{formatNaira(order.total_kobo / 100)}</span>
+      <span className="done-row__actions">
+        {back && (
+          <button className="btn-s btn-s--quiet" disabled={busy} onClick={() => onMove(order, back.to)}>
+            Undo
+          </button>
+        )}
+        <button className="btn-s btn-s--quiet" onClick={() => onPrint(order)}>
+          Print
+        </button>
+      </span>
     </article>
   );
 }

@@ -1,10 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import type { Session } from '@supabase/supabase-js';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 import { formatNaira } from '@/lib/order-menu';
-import OrderCard, { PrintTicket } from './staff/OrderCard';
+import { Logo } from '@/components/Logo';
+import OrderCard, { DoneRow, PrintTicket } from './staff/OrderCard';
 import StaffLogin from './staff/StaffLogin';
 import { chimeReady, playChime, unlockChime } from './staff/chime';
 import { dayLabel, dueIn, lagosDayRange, lagosYmd, shiftYmd } from './staff/time';
@@ -45,7 +47,7 @@ export default function StaffDashboard() {
       });
   }, [userId]);
 
-  if (session === undefined) return null;
+  if (session === undefined) return <p className="staff-wait">Loading…</p>;
   if (!session) return <StaffLogin />;
   if (staff === 'checking') return <p className="staff-wait">Checking your account…</p>;
   if (staff === 'not-staff') {
@@ -323,29 +325,30 @@ function Board({ email }: { email: string }) {
   return (
     <div className="staff">
       <header className="staff-bar">
-        <div className="staff-bar__brand">
-          <span>The Courtyard Cafe</span>
-          <h1>Delivery orders</h1>
-        </div>
+        <Link href="/" className="staff-bar__brand" title="Back to the website">
+          <Logo alt="" sizes="40px" className="staff-bar__logo" />
+          <span>
+            <small>The Courtyard Cafe</small>
+            <strong>Delivery orders</strong>
+          </span>
+        </Link>
         <div className="staff-bar__right">
           <span
             className={`staff-live ${live ? 'is-live' : live === null ? 'is-wait' : ''}`}
             title={live ? 'New orders appear instantly' : 'Not live yet. Checking for new orders every minute.'}
           >
-            {live ? 'Live' : live === null ? 'Connecting…' : 'Reconnecting…'}
+            <span className="staff-live__text">{live ? 'Live' : live === null ? 'Connecting' : 'Offline'}</span>
           </span>
           <button
             className={`btn-s ${soundWanted && soundOn ? 'btn-s--on' : 'btn-s--quiet'}`}
             onClick={toggleSound}
             aria-pressed={soundWanted && soundOn}
+            aria-label={soundWanted && soundOn ? 'Sound on. Tap to mute.' : 'Sound off. Tap to turn on.'}
           >
-            {soundWanted && soundOn ? 'Sound on' : 'Sound off'}
+            <SoundIcon on={soundWanted && soundOn} />
+            <span className="staff-bar__label">{soundWanted && soundOn ? 'Sound on' : 'Sound off'}</span>
           </button>
-          <button
-            className="btn-s btn-s--quiet"
-            title={email}
-            onClick={() => supabaseBrowser.auth.signOut()}
-          >
+          <button className="btn-s btn-s--quiet" title={email} onClick={() => supabaseBrowser.auth.signOut()}>
             Sign out
           </button>
         </div>
@@ -415,11 +418,11 @@ function Board({ email }: { email: string }) {
           <dd>{formatNaira(stats.revenue)}</dd>
         </div>
         <div>
-          <dt>Still to deliver</dt>
+          <dt>To deliver</dt>
           <dd>{stats.open}</dd>
         </div>
         <div className={stats.late ? 'is-late' : ''}>
-          <dt>Running late</dt>
+          <dt>Late</dt>
           <dd>{stats.late}</dd>
         </div>
       </dl>
@@ -466,6 +469,13 @@ function Board({ email }: { email: string }) {
                 {query ? 'No matches' : l.id === 'new' ? 'No new orders' : 'Nothing here'}
               </div>
             ) : (
+              l.id === 'done' ? (
+                <div className="done-list">
+                  {lanes.done.map((o) => (
+                    <DoneRow key={o.id} order={o} busy={busy.has(o.id)} onMove={move} onPrint={setPrinting} />
+                  ))}
+                </div>
+              ) : (
               lanes[l.id].map((o) => (
                 <OrderCard
                   key={o.id}
@@ -477,6 +487,7 @@ function Board({ email }: { email: string }) {
                   onPrint={setPrinting}
                 />
               ))
+              )
             )}
           </section>
         ))}
@@ -500,5 +511,21 @@ function Board({ email }: { email: string }) {
         </div>
       )}
     </div>
+  );
+}
+
+function SoundIcon({ on }: { on: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H3v6h3l5 4V5z" />
+      {on ? (
+        <>
+          <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+          <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+        </>
+      ) : (
+        <path d="m16 9 6 6m0-6-6 6" />
+      )}
+    </svg>
   );
 }
