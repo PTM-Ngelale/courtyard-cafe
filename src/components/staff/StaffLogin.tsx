@@ -50,6 +50,9 @@ export default function StaffLogin() {
           {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
+      <p className="staff-gate__help">
+        Forgot your password? Ask the manager to set a new one for you.
+      </p>
       <Link href="/" className="staff-gate__back">
         ← Back to the website
       </Link>
