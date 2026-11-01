@@ -123,16 +123,32 @@ Built for a tablet or phone in the kitchen:
 Code: `src/components/StaffDashboard.tsx` and `src/components/staff/*`.
 
 Only accounts in the `staff` table can see orders (`reef-court-staff.sql`).
-To add someone: create their login in Supabase **Authentication > Users**,
-then run
-`insert into staff (user_id, name) select id, 'Their name' from auth.users where email = 'them@example.com';`
+
+### Managing staff (`/admin/staff`)
+
+Each person on the staff list is either **staff** (sees and moves orders) or
+a **manager** (also opens Manage staff). Managers see a **Staff** button in
+the order board's top bar. On that page they can add someone (name, email, a
+generated password, role) and get a ready-to-send message with the login,
+make someone a manager or staff, set a new password, and remove someone
+(this deletes their login; their past orders stay).
+
+Rules, enforced on the server in `src/app/api/staff/route.ts` (every call
+checks the caller's Supabase token and manager role): there's always at
+least one manager, and nobody can remove themselves. Roles come from
+`reef-court-staff-roles.sql`, which also makes the owner a manager.
+
+Code: `src/app/admin/staff/page.tsx`, `src/components/staff/ManageStaff.tsx`,
+`src/components/staff/useStaffAccess.ts`, `src/lib/staff-admin.ts`.
 
 ### Setup
 
 1. Create a Supabase project, then run `reef-court-schema.sql`,
-   `reef-court-seed.sql` and `reef-court-staff.sql` in the SQL editor.
-2. In **Authentication > Users**, create one account per staff member who
-   needs `/admin/orders`, and add each to the `staff` table (see above).
+   `reef-court-seed.sql`, `reef-court-staff.sql` and
+   `reef-court-staff-roles.sql` in the SQL editor.
+2. In **Authentication > Users**, create the first manager's account and
+   add it to the `staff` table with role `manager`. Add everyone else from
+   `/admin/staff`.
    Switch off **Allow new users to sign up** (Authentication > Sign In /
    Providers) so nobody can make their own account.
 3. Set these environment variables (`.env.local` locally, Vercel project
