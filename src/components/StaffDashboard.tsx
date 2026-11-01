@@ -7,6 +7,7 @@ import { formatNaira } from '@/lib/order-menu';
 import { Logo } from '@/components/Logo';
 import OrderCard, { DoneRow, PrintTicket } from './staff/OrderCard';
 import StaffLogin from './staff/StaffLogin';
+import AccountPanel from './staff/AccountPanel';
 import { useStaffAccess } from './staff/useStaffAccess';
 import { chimeReady, playChime, unlockChime } from './staff/chime';
 import { dayLabel, dueIn, lagosDayRange, lagosYmd, shiftYmd } from './staff/time';
@@ -56,6 +57,7 @@ function Board({ email, manager }: { email: string; manager: boolean }) {
   const [soundWanted, setSoundWanted] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
   const [printing, setPrinting] = useState<Order | null>(null);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   const dayRef = useRef(day);
   dayRef.current = day;
@@ -328,8 +330,14 @@ function Board({ email, manager }: { email: string; manager: boolean }) {
               <span className="staff-bar__label">Staff</span>
             </Link>
           )}
-          <button className="btn-s btn-s--quiet" title={email} onClick={() => supabaseBrowser.auth.signOut()}>
-            Sign out
+          <button
+            className="btn-s btn-s--quiet"
+            title={email}
+            aria-haspopup="dialog"
+            onClick={() => setAccountOpen(true)}
+          >
+            <PersonIcon />
+            <span className="staff-bar__label">Account</span>
           </button>
         </div>
       </header>
@@ -483,6 +491,8 @@ function Board({ email, manager }: { email: string; manager: boolean }) {
         </div>
       )}
 
+      {accountOpen && <AccountPanel email={email} onClose={() => setAccountOpen(false)} />}
+
       {printing && (
         <div className="print-only">
           <PrintTicket order={printing} />
@@ -515,6 +525,15 @@ export function PeopleIcon() {
       <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
       <path d="M16 4.5a3.5 3.5 0 0 1 0 7" />
       <path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
+    </svg>
+  );
+}
+
+function PersonIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21a8 8 0 0 1 16 0" />
     </svg>
   );
 }
