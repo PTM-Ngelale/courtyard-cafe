@@ -358,14 +358,12 @@ function Board({ email }: { email: string }) {
         <div className="staff-banner">
           <span>
             {soundWanted
-              ? 'Tap anywhere to let new orders ring.'
+              ? 'Sound was paused when the page reloaded.'
               : 'Turn on sound so this screen rings when a new order is paid.'}
           </span>
-          {!soundWanted && (
-            <button className="btn-s btn-s--on" onClick={toggleSound}>
-              Turn on sound
-            </button>
-          )}
+          <button className="btn-s btn-s--on" onClick={toggleSound}>
+            {soundWanted ? 'Turn sound back on' : 'Turn on sound'}
+          </button>
         </div>
       )}
 
