@@ -330,7 +330,7 @@ function Board({ email }: { email: string }) {
         <div className="staff-bar__right">
           <span
             className={`staff-live ${live ? 'is-live' : live === null ? 'is-wait' : ''}`}
-            title={live ? 'New orders appear instantly' : 'Not live yet; checking for orders every minute'}
+            title={live ? 'New orders appear instantly' : 'Not live yet. Checking for new orders every minute.'}
           >
             {live ? 'Live' : live === null ? 'Connecting…' : 'Reconnecting…'}
           </span>

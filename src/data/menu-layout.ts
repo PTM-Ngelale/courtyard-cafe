@@ -68,14 +68,14 @@ export const FAVOURITES: Favourite[] = [
     photo: 'springrolls',
     alt: 'Spring rolls and samosas with pepper dip',
     name: 'Courtyard Platter',
-    blurb: 'Spring rolls, samosas, kebabs, peppered goat meat and fries to share.',
+    blurb: 'Spring rolls, samosas, kebabs, peppered goat meat and fries. Made for sharing.',
     price: dish('Sharing platters', 'Courtyard Platter').p,
   },
   {
     photo: 'milkshake',
     alt: 'Strawberry milkshake',
     name: 'Strawberry Milkshake',
-    blurb: 'Tall, cold and properly thick.',
+    blurb: 'Thick and cold, in a tall glass.',
     price: dish('Milkshakes', 'Strawberry').p,
   },
 ];

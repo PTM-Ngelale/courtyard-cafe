@@ -266,7 +266,7 @@ export const foodGroups: MenuGroup[] = [
   },
   {
     title: 'Proteins & extras',
-    note: 'Wing flavours — original, peppered, honey-glazed or buffalo',
+    note: 'Wing flavours: original, peppered, honey-glazed or buffalo',
     items: [
       { n: 'Chicken Wings', d: 'Regular pack, 5 pcs', p: '7,300' },
       { n: 'Chicken Wings', d: 'Pro pack, 10 pcs', p: '12,800' },

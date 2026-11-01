@@ -11,7 +11,7 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const TITLE = `${site.name} — Café & Kitchen, Port Harcourt`;
+const TITLE = `${site.name}, Port Harcourt`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

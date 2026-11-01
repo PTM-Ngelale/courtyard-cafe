@@ -21,7 +21,7 @@ export default function GalleryPage() {
           <p className="kicker">On the pass</p>
           <h1>Gallery</h1>
           <p className="menu-intro__lede">
-            A few plates and glasses from the courtyard. There&apos;s more, most days, on Instagram.
+            Some of what comes out of our kitchen. We post more on Instagram.
           </p>
           <nav className="menu-intro__jump" aria-label="More">
             <a href={contact.instagramUrl} target="_blank" rel="noopener noreferrer me">
