@@ -1276,3 +1276,112 @@
 .person__panel--danger .add-form__actions {
   margin-top: 10px;
 }
+
+/* ---------- Account panel (bottom sheet on phones, centred card on wide screens) ---------- */
+
+.sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(28, 35, 32, 0.4);
+  animation: sheet-fade 160ms var(--ease-out) both;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 440px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+  animation: sheet-up 220ms var(--ease-out) both;
+}
+
+@media (min-width: 600px) {
+  .sheet-backdrop {
+    align-items: center;
+  }
+
+  .sheet {
+    border-radius: var(--radius-lg);
+  }
+}
+
+.sheet__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sheet__head h2 {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.sheet__head p {
+  font-size: 14px;
+  color: var(--ink-3);
+  overflow-wrap: anywhere;
+}
+
+.sheet__form {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--divider-soft);
+  background: var(--bg);
+}
+
+.sheet__form h3 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.sheet__form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin: 12px 0 6px;
+}
+
+.sheet__form input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--cream-100);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.sheet__form .manage__hint {
+  margin: 8px 0 12px;
+}
+
+.sheet__signout {
+  margin-top: 12px;
+}
+
+@keyframes sheet-fade {
+  from { opacity: 0; }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(24px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-backdrop,
+  .sheet {
+    animation: none;
+  }
+}
