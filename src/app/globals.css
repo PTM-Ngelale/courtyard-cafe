@@ -612,6 +612,25 @@ a:hover {
 }
 
 /* Key for the menu marks, under the food grid */
+/* Delivery prompt under the food menu. */
+.menu-order {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 24px;
+  margin-top: clamp(28px, 3vw, 40px);
+  padding: 18px 22px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.menu-order p {
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
 .menu-legend {
   display: flex;
   flex-wrap: wrap;
