@@ -1020,3 +1020,252 @@
     font-size: 9pt;
   }
 }
+
+/* ---------- Manage staff (/admin/staff) ---------- */
+
+.staff--narrow {
+  max-width: 720px;
+}
+
+.staff-bar a.btn-s {
+  text-decoration: none;
+}
+
+.manage {
+  margin-bottom: 20px;
+}
+
+.manage__title {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.manage__hint {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+}
+
+.add-form,
+.added {
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--divider-soft);
+}
+
+.add-form label,
+.person__panel label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin: 12px 0 6px;
+}
+
+.add-form input:not([type='radio']),
+.person__panel input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--cream-100);
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+}
+
+.add-form__row {
+  display: flex;
+  gap: 8px;
+}
+
+.add-form__row .btn-s {
+  flex: none;
+  min-height: 44px;
+}
+
+.add-form .manage__hint {
+  margin: 6px 0 0;
+}
+
+.add-form__roles {
+  border: 0;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.add-form__roles legend {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 6px;
+}
+
+.add-form__roles label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.add-form__roles label:has(input:checked) {
+  border-color: var(--gold);
+  background: #fdf5e2;
+}
+
+.add-form__roles input {
+  margin-top: 3px;
+  accent-color: var(--gold-deep);
+}
+
+.add-form__roles span {
+  display: grid;
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+.add-form__roles strong {
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.add-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.added {
+  border-color: #b9dcc4;
+  background: #eaf5ee;
+  margin-bottom: 12px;
+}
+
+.added__msg {
+  margin: 10px 0 12px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--divider-soft);
+  font: inherit;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.added__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.people {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.person {
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1px solid var(--divider-soft);
+  display: grid;
+  gap: 12px;
+}
+
+.person__main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.person__who {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.person__who strong {
+  font-size: 16px;
+}
+
+.person__who span {
+  font-size: 14px;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+.person__who .person__seen {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+.person__you {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--band);
+  color: var(--ink-3) !important;
+  font-size: 11px !important;
+  font-weight: 600;
+  vertical-align: 2px;
+}
+
+.person__role {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: var(--band);
+  color: var(--ink-2);
+}
+
+.person__role--manager {
+  background: var(--gold-light);
+  color: var(--gold-deep);
+}
+
+.person__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.person__actions .btn-s {
+  min-height: 36px;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.person__panel label {
+  margin-top: 0;
+}
+
+.person__panel--danger {
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--st-late-bg);
+  font-size: 14px;
+}
+
+.person__panel--danger .add-form__actions {
+  margin-top: 10px;
+}

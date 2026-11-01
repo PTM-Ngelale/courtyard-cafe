@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import type { Session } from '@supabase/supabase-js';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 import { formatNaira } from '@/lib/order-menu';
 import { Logo } from '@/components/Logo';
 import OrderCard, { DoneRow, PrintTicket } from './staff/OrderCard';
 import StaffLogin from './staff/StaffLogin';
+import { useStaffAccess } from './staff/useStaffAccess';
 import { chimeReady, playChime, unlockChime } from './staff/chime';
 import { dayLabel, dueIn, lagosDayRange, lagosYmd, shiftYmd } from './staff/time';
 import { LANES, ORDER_COLUMNS, laneOf, type Lane, type Order, type OrderStatus } from './staff/types';
@@ -18,39 +18,13 @@ const REMIND_MS = 2 * 60 * 1000;
 const POLL_MS = 60 * 1000;
 const SOUND_KEY = 'courtyard-staff-sound';
 
-type StaffCheck = 'checking' | 'staff' | 'not-staff';
-
 export default function StaffDashboard() {
-  const [session, setSession] = useState<Session | null | undefined>(undefined);
-  const [staff, setStaff] = useState<StaffCheck>('checking');
-
-  useEffect(() => {
-    supabaseBrowser.auth.getSession().then(({ data }) => setSession(data.session));
-    const { data: sub } = supabaseBrowser.auth.onAuthStateChange((_event, s) => setSession(s));
-    return () => sub.subscription.unsubscribe();
-  }, []);
-
-  const userId = session?.user.id;
-  useEffect(() => {
-    if (!userId) return;
-    setStaff('checking');
-    supabaseBrowser
-      .from('staff')
-      .select('user_id')
-      .eq('user_id', userId)
-      .maybeSingle()
-      .then(({ data, error }) => {
-        // Before reef-court-staff.sql has been run there is no staff table;
-        // the database rules still decide what this account can see.
-        if (error) setStaff('staff');
-        else setStaff(data ? 'staff' : 'not-staff');
-      });
-  }, [userId]);
+  const { session, access } = useStaffAccess();
 
   if (session === undefined) return <p className="staff-wait">Loading…</p>;
   if (!session) return <StaffLogin />;
-  if (staff === 'checking') return <p className="staff-wait">Checking your account…</p>;
-  if (staff === 'not-staff') {
+  if (access === 'checking') return <p className="staff-wait">Checking your account…</p>;
+  if (access === 'not-staff') {
     return (
       <div className="staff-gate">
         <h1>Not on the staff list</h1>
@@ -64,10 +38,10 @@ export default function StaffDashboard() {
       </div>
     );
   }
-  return <Board email={session.user.email ?? ''} />;
+  return <Board email={session.user.email ?? ''} manager={access === 'manager'} />;
 }
 
-function Board({ email }: { email: string }) {
+function Board({ email, manager }: { email: string; manager: boolean }) {
   const [now, setNow] = useState(() => Date.now());
   const today = lagosYmd(new Date(now));
   const [day, setDay] = useState(today);
@@ -348,6 +322,12 @@ function Board({ email }: { email: string }) {
             <SoundIcon on={soundWanted && soundOn} />
             <span className="staff-bar__label">{soundWanted && soundOn ? 'Sound on' : 'Sound off'}</span>
           </button>
+          {manager && (
+            <Link href="/admin/staff/" className="btn-s btn-s--quiet" title="Add or remove staff">
+              <PeopleIcon />
+              <span className="staff-bar__label">Staff</span>
+            </Link>
+          )}
           <button className="btn-s btn-s--quiet" title={email} onClick={() => supabaseBrowser.auth.signOut()}>
             Sign out
           </button>
@@ -524,6 +504,17 @@ function SoundIcon({ on }: { on: boolean }) {
       ) : (
         <path d="m16 9 6 6m0-6-6 6" />
       )}
+    </svg>
+  );
+}
+
+export function PeopleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
+      <path d="M16 4.5a3.5 3.5 0 0 1 0 7" />
+      <path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5" />
     </svg>
   );
 }
