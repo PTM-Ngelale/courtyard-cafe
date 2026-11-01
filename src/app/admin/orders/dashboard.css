@@ -860,6 +860,13 @@
   margin-bottom: 12px;
 }
 
+.staff-gate__help {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
 .staff-gate__back {
   display: inline-block;
   margin-top: 18px;
