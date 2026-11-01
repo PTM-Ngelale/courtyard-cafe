@@ -4,6 +4,7 @@ import { confirmPaidBooking } from '@/lib/paystack';
 import { formatNaira } from '@/lib/order-menu';
 import { formatLagosTime } from '@/lib/delivery';
 import { contact } from '@/data/site';
+import ClearCart from '@/components/ClearCart';
 import '../booking.css';
 
 export const metadata: Metadata = {
@@ -28,6 +29,7 @@ export default async function ConfirmationPage({
     const b = result.booking;
     return (
       <main className="booking-page">
+        <ClearCart />
         <div className="booking-success">
           <h2>Order confirmed</h2>
           <p>
