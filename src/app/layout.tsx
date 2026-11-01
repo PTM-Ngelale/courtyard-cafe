@@ -70,7 +70,7 @@ const jsonLd = {
   },
   openingHoursSpecification,
   sameAs: [contact.instagramUrl],
-  hasMenu: `${site.url}/#menu`,
+  hasMenu: `${site.url}/menu/`,
 };
 
 /**

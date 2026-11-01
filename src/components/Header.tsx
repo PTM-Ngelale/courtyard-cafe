@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { Logo } from "./Logo";
 import { Button } from "./Button";
 
 const LINKS = [
-  { href: "#about", label: "About" },
-  { href: "#menu", label: "Menu" },
-  { href: "#drinks", label: "Drinks" },
-  { href: "#gallery", label: "Gallery" },
+  // Absolute so the header works from /menu and /book too; on the home page
+  // "/#about" is a same-page jump, no reload.
+  { href: "/#about", label: "About" },
+  { href: "/menu/", label: "Menu" },
+  { href: "/#gallery", label: "Gallery" },
   { href: "/book/", label: "Order now" },
 ];
 
@@ -28,12 +30,12 @@ export function Header() {
 
   return (
     <header className="site-header">
-      <a className="site-header__brand" href="#top">
+      <Link className="site-header__brand" href="/">
         <Logo alt="The Courtyard Cafe" sizes="38px" priority />
         <span className="site-header__wordmark">
           The Courtyard<span className="site-header__wordmark-suffix">&nbsp;Cafe</span>
         </span>
-      </a>
+      </Link>
 
       <button
         className="site-header__toggle"
@@ -60,7 +62,7 @@ export function Header() {
             {l.label}
           </a>
         ))}
-        <Button href="#visit" variant="primary" className="site-header__cta">
+        <Button href="/#visit" variant="primary" className="site-header__cta">
           Visit us
         </Button>
       </nav>

@@ -29,7 +29,9 @@ idempotent, so they're cheap to leave in place.
 
 | Path | What |
 | --- | --- |
-| `src/app/page.tsx` | The whole page — all eight sections |
+| `src/app/page.tsx` | Home page: hero, about, menu preview (Courtyard favourites), gallery, 3D, visit |
+| `src/app/menu/page.tsx` | Full menu page (`/menu/`): food tabs and drinks |
+| `src/data/menu-layout.ts` | Food tabs, drinks order and the home page's favourites, shared by both pages. Favourite prices are looked up from `menu.ts`, so they can't drift |
 | `src/app/layout.tsx` | `<head>`: metadata (OG/Twitter), favicon, Inter via `next/font`, `CafeOrCoffeeShop` JSON-LD |
 | `src/app/globals.css` | Design tokens, reset, `.btn` / `.tag` primitives, and every section/component style |
 | `src/components/` | `Header` (client — mobile nav), `Footer`, `Button`, `Tag`, `MenuGroup`, `DrinkCard`, `Photo`, `Logo` |

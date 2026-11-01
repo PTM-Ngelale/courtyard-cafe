@@ -612,14 +612,150 @@ a:hover {
 }
 
 /* Key for the menu marks, under the food grid */
-/* Delivery prompt under the food menu. */
+/* ---- Home: menu preview ---- */
+.favourites-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.favourite {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--divider-soft);
+  overflow: hidden;
+}
+
+.favourite__photo {
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.favourite__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.favourite__text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px 18px;
+}
+
+.favourite__text h3 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.favourite__text p {
+  color: var(--ink-3);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.favourite__price {
+  margin-top: auto;
+  padding-top: 6px;
+  color: var(--gold-deep);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Phones: compact rows (photo left) so four dishes don't fill four screens. */
+@media (max-width: 560px) {
+  .favourite {
+    grid-template-columns: 112px 1fr;
+    grid-template-rows: none;
+  }
+
+  /* The photo fills the row but doesn't set its height; the text does. */
+  .favourite__photo {
+    position: relative;
+    aspect-ratio: auto;
+    min-height: 112px;
+  }
+
+  .favourite__photo img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .favourite__text {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .favourite__text h3 {
+    font-size: 16px;
+  }
+
+  .favourite__text p {
+    font-size: 13px;
+  }
+}
+
+.favourites-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+/* ---- Menu page intro ---- */
+.menu-intro {
+  padding-bottom: clamp(32px, 4vw, 52px);
+}
+
+.menu-intro h1 {
+  margin-bottom: 14px;
+}
+
+.menu-intro__lede {
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 52ch;
+}
+
+.menu-intro__jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin-top: 22px;
+  font-size: 15px;
+}
+
+.menu-intro__jump > a:not(.btn) {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 4px;
+  padding: 8px 0;
+}
+
+.menu-intro__jump > a:not(.btn):hover {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+/* Delivery prompt (menu page, under the drinks). */
 .menu-order {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 14px 24px;
-  margin-top: clamp(28px, 3vw, 40px);
+  margin-top: clamp(32px, 4vw, 52px);
   padding: 18px 22px;
   border: 1px solid var(--divider);
   border-radius: var(--radius-lg);

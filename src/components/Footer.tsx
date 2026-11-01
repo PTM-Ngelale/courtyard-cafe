@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- static export serves the pre-optimised WebP wordmark directly */
+import Link from "next/link";
 import { Logo } from "./Logo";
 import { contact, site } from "@/data/site";
 
@@ -18,8 +19,8 @@ export function Footer() {
           >
             Instagram
           </a>
-          <a href="#menu">Menu</a>
-          <a href="#visit">Contact</a>
+          <Link href="/menu/">Menu</Link>
+          <Link href="/#visit">Contact</Link>
           <span>
             © {new Date().getFullYear()} {site.name}
           </span>
