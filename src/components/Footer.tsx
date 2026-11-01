@@ -20,6 +20,7 @@ export function Footer() {
             Instagram
           </a>
           <Link href="/menu/">Menu</Link>
+          <Link href="/gallery/">Gallery</Link>
           <Link href="/#visit">Contact</Link>
           <span>
             © {new Date().getFullYear()} {site.name}

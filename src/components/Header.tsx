@@ -10,7 +10,7 @@ const LINKS = [
   // "/#about" is a same-page jump, no reload.
   { href: "/#about", label: "About" },
   { href: "/menu/", label: "Menu" },
-  { href: "/#gallery", label: "Gallery" },
+  { href: "/gallery/", label: "Gallery" },
   { href: "/book/", label: "Order now" },
 ];
 

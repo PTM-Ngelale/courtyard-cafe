@@ -7,18 +7,9 @@ import { Photo } from "@/components/Photo";
 import { Logo } from "@/components/Logo";
 import { Venue3D } from "@/components/Venue3D";
 import { FAVOURITES } from "@/data/menu-layout";
+import { GALLERY_PREVIEW } from "@/data/gallery";
 import { contact, hours, hoursSummary } from "@/data/site";
 
-const GALLERY: {
-  name: "pasta" | "springrolls" | "wings" | "breakfast" | "milkshake";
-  alt: string;
-}[] = [
-  { name: "pasta", alt: "Asun pasta" },
-  { name: "springrolls", alt: "Spring rolls and samosa with pepper dip" },
-  { name: "wings", alt: "Honey glazed wings" },
-  { name: "breakfast", alt: "English breakfast" },
-  { name: "milkshake", alt: "Strawberry milkshake" },
-];
 
 export default function HomePage() {
   return (
@@ -173,15 +164,20 @@ export default function HomePage() {
             </a>
           </div>
           <div className="gallery-grid" data-reveal-stagger>
-            {GALLERY.map((photo, i) => (
-              <figure className="gallery__figure" key={`${photo.name}-${i}`}>
+            {GALLERY_PREVIEW.map((photo) => (
+              <figure className="gallery__figure" key={photo.name}>
                 <Photo
                   name={photo.name}
                   alt={photo.alt}
-                  sizes="(max-width: 560px) 90vw, (max-width: 900px) 45vw, 22vw"
+                  sizes="(max-width: 560px) 90vw, (max-width: 900px) 45vw, 30vw"
                 />
               </figure>
             ))}
+          </div>
+          <div className="favourites-actions" data-reveal>
+            <Button href="/gallery/" variant="primary">
+              See the gallery
+            </Button>
           </div>
         </section>
 
