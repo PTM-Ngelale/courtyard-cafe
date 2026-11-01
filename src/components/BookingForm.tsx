@@ -219,7 +219,7 @@ export default function BookingForm() {
               window.scrollTo({ top: 0 });
             }}
           >
-            Continue
+            {itemCount === 0 ? 'Continue' : 'Checkout'}
           </button>
         </div>
         {slots.length === 0 && (

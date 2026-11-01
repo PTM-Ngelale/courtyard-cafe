@@ -31,7 +31,7 @@ export default async function ConfirmationPage({
       <main className="booking-page">
         <ClearCart />
         <div className="booking-success">
-          <h2>Order confirmed</h2>
+          <h1>Order confirmed</h1>
           <p>
             Thanks, {b.customer_name.split(' ')[0]}. We&rsquo;ll deliver to {b.house_number}{' '}
             {b.street_name} at about {formatLagosTime(new Date(b.preferred_time))}.
@@ -59,9 +59,11 @@ export default async function ConfirmationPage({
           </p>
         </div>
 
-        <p className="booking-footnote">
-          <Link href="/">Back to The Courtyard</Link>
-        </p>
+        <div className="booking-next">
+          <Link href="/" className="booking-cta">
+            Back to The Courtyard
+          </Link>
+        </div>
       </main>
     );
   }
@@ -77,9 +79,14 @@ export default async function ConfirmationPage({
     <main className="booking-page">
       <h1>Order not confirmed</h1>
       <div className="booking-error">{message}</div>
-      <p className="booking-footnote">
-        <Link href="/book/">Start a new order</Link>
-      </p>
+      <div className="booking-next">
+        <Link href="/book/" className="booking-cta">
+          {result.state === 'unpaid' ? 'Try again' : 'Start a new order'}
+        </Link>
+        <Link href="/" className="booking-cta booking-cta--quiet">
+          Back to The Courtyard
+        </Link>
+      </div>
     </main>
   );
 }

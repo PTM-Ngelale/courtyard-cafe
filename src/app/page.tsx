@@ -67,11 +67,11 @@ export default function HomePage() {
               afternoon. We&apos;re here from morning till late.
             </p>
             <div className="hero__actions">
-              <Button href="#menu" variant="primary">
-                See the menu
+              <Button href="/book/" variant="primary">
+                Order now
               </Button>
-              <Button href="#visit" variant="ghost">
-                Find us
+              <Button href="#menu" variant="ghost">
+                See the menu
               </Button>
             </div>
             <div className="hero__meta">
@@ -147,6 +147,12 @@ export default function HomePage() {
             <p className="section-subline">{hoursSummary.kitchen}</p>
           </div>
           <MenuTabs sections={MENU_SECTIONS} />
+          <div className="menu-order" data-reveal>
+            <p>Living in Reef Court Estate? We&apos;ll bring it to your door today.</p>
+            <Button href="/book/" variant="primary">
+              Order now
+            </Button>
+          </div>
           <p className="menu-legend" data-reveal>
             {(Object.keys(MARK_LABELS) as MenuMarkKind[]).map((mark) => (
               <span key={mark}>
