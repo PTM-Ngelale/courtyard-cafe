@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { Logo } from '@/components/Logo';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 
 export default function StaffLogin() {
@@ -21,6 +23,7 @@ export default function StaffLogin() {
 
   return (
     <div className="staff-gate">
+      <Logo className="staff-gate__logo" alt="The Courtyard Cafe" sizes="56px" />
       <p className="staff-gate__brand">The Courtyard Cafe</p>
       <h1>Staff sign in</h1>
       {error && <div className="staff-error">{error}</div>}
@@ -47,6 +50,9 @@ export default function StaffLogin() {
           {loading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
+      <Link href="/" className="staff-gate__back">
+        ← Back to the website
+      </Link>
     </div>
   );
 }

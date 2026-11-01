@@ -22,6 +22,7 @@ export function Footer() {
           <Link href="/menu/">Menu</Link>
           <Link href="/gallery/">Gallery</Link>
           <Link href="/#visit">Contact</Link>
+          <Link href="/admin/orders/" rel="nofollow">Staff</Link>
           <span>
             © {new Date().getFullYear()} {site.name}
           </span>
