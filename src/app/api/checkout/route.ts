@@ -4,6 +4,7 @@ import { createServiceClient } from '@/lib/supabase-server';
 import { initializeTransaction } from '@/lib/paystack';
 import { MAX_QUANTITY, orderItemsById } from '@/lib/order-menu';
 import { DELIVERY_FEE_NAIRA, deliveryTimeProblem } from '@/lib/delivery';
+import { clientIp, rateLimit } from '@/lib/rate-limit';
 
 /**
  * Starts a delivery order: checks everything again on the server (prices come
@@ -27,7 +28,22 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const bad = (error: string) => NextResponse.json({ error }, { status: 400 });
 
+/** Checkouts allowed per IP per window: room for a few payment retries, not a script. */
+const CHECKOUT_LIMIT = 10;
+const CHECKOUT_WINDOW_MS = 10 * 60 * 1000;
+
+/** Unpaid orders older than this are abandoned (Paystack checkouts expire long before). */
+const ABANDONED_AFTER_MS = 24 * 60 * 60 * 1000;
+
 export async function POST(req: NextRequest) {
+  const limited = rateLimit(`checkout:${clientIp(req)}`, CHECKOUT_LIMIT, CHECKOUT_WINDOW_MS);
+  if (!limited.ok) {
+    return NextResponse.json(
+      { error: 'Too many orders started from here. Please wait a few minutes and try again.' },
+      { status: 429, headers: { 'Retry-After': String(limited.retryAfterSeconds) } }
+    );
+  }
+
   const body = (await req.json().catch(() => null)) as CheckoutBody | null;
   if (!body) return bad('Invalid request');
 
@@ -64,6 +80,15 @@ export async function POST(req: NextRequest) {
   const totalKobo = (subtotal + DELIVERY_FEE_NAIRA) * 100;
 
   const supabase = createServiceClient();
+
+  // Housekeeping: clear out abandoned unpaid orders so junk can't pile up.
+  // Best effort; a failure here mustn't block a real order.
+  const { error: cleanupError } = await supabase
+    .from('bookings')
+    .delete()
+    .eq('status', 'awaiting_payment')
+    .lt('created_at', new Date(Date.now() - ABANDONED_AFTER_MS).toISOString());
+  if (cleanupError) console.error('Abandoned order cleanup failed:', cleanupError);
 
   const { data: address } = await supabase
     .from('reef_court_addresses')
